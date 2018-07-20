@@ -160,16 +160,18 @@ class ItemResultPreviewer extends ToolModule
     {
         if (!isset($this->itemVariables[$itemDefinition])) {
             $variables = $this->getDeliveryResultsService($delivery)->getStructuredVariables(
-                $resultIdentifier, ResultsService::VARIABLES_FILTER_LAST_SUBMITTED, [\taoResultServer_models_classes_ResponseVariable::class]
+                $resultIdentifier, ResultsService::VARIABLES_FILTER_ALL, [\taoResultServer_models_classes_ResponseVariable::class]
             );
 
+            $itemVariables = [];
+            /** @var \taoResultServer_models_classes_ResponseVariable $variable */
             foreach ($variables as $variable) {
                 if ($variable['internalIdentifier'] == $itemDefinition) {
-                    return $this->itemVariables[$itemDefinition] = $variable;
+                    $itemVariables[] = $variable;
                 }
             }
 
-            return [];
+            return $this->itemVariables[$itemDefinition] = empty($itemVariables) ? [] : array_pop($itemVariables);
         }
 
         return $this->itemVariables[$itemDefinition];
