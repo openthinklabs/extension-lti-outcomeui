@@ -8,8 +8,6 @@ define([
 
     return {
         start : function(config) {
-            console.log(config.state);
-
             var uri = config.uri;
             var resultIdentifier = config.resultIdentifier;
             var itemDefinition = config.itemDefinition;
