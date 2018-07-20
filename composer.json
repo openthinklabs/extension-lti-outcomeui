@@ -1,5 +1,4 @@
 {
-
     "name": "oat-sa/extension-lti-outcomeui",
     "description" : "Extension to manage LTI result provider for TAO",
     "type" : "tao-extension",
@@ -42,8 +41,9 @@
 		}
 	],
 	"support": {
-		"forum": "http://forum.taotesting.com",
-		"issues": "http://forge.taotesting.com"
+		"forum": "https://forum.taocloud.org/",
+		"issues": "https://forum.taocloud.org/",
+		"docs": "https://hub.taocloud.org/"
 	},
 	"keywords" : [
 		"tao",
@@ -58,10 +58,10 @@
     "extra" : {
     	"tao-extension-name" : "ltiOutcomeUi"
     },
-        "autoload" : {
-	        "psr-4": {
-	            "oat\\ltiOutcomeUi\\" :""
-	        }
+	"autoload" : {
+		"psr-4": {
+			"oat\\ltiOutcomeUi\\" :""
+		}
     },
     "minimum-stability" : "dev",
     "require": {

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<rdf:RDF
+        xml:base="http://www.tao.lu/Ontologies/LtiOutcomeUi.rdf#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:generis="http://www.tao.lu/Ontologies/generis.rdf#"
+>
+    <rdf:Description rdf:about="http://www.imsglobal.org/imspurl/lis/v1/vocab/membership#Instructor">
+        <generis:includesRole rdf:resource="http://www.tao.lu/Ontologies/TAOResult.rdf#TaoQtiReviewerRole"/>
+    </rdf:Description>
+</rdf:RDF>
