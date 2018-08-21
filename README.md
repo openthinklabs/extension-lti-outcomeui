@@ -1,4 +1,4 @@
-# extension-lti-deliveryprovider
+# extension-lti-outcomeui
 The LTI Outcome extension allows to manage results via LTI
 
 The endpoint to preview a result by deliveryId and item reference:
