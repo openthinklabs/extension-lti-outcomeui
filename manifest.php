@@ -28,7 +28,7 @@ return array(
     'version' => '0.1.0',
     'author' => 'Open Assessment Technologies',
     'requires' => array(
-        'taoLti' => '>=6.3.1',
+        'taoLti' => '>=6.3.3',
         'taoOutcomeUi' => '>=5.12.0',
         'taoQtiTestPreviewer' => '>=0.2.0'
     ),
