@@ -25,7 +25,8 @@ define([
 
             previewerFactory(type, uri, state, {
                 readOnly: true,
-                fullPage: true
+                fullPage: true,
+                hideActionBars: true,
             });
         }
     };
