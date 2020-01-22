@@ -15,7 +15,8 @@ module.exports = function(grunt) {
             {
               name: "ltiOutcomeUi",
               default: true,
-              babel: true
+              babel: true,
+              bootstrap: true
             }
           ]
         }
