@@ -1,31 +1,31 @@
-/**
- * @author Moyon Camille <camille@taotesting.com>
- */
-define(["taoItems/previewer/factory"], function(previewerFactory) {
-  "use strict";
+// Licensed under Gnu Public Licence version 2
+// Copyright (c) 2020 (original work) Open Assessment Technologies SA ;
 
-  return {
-    start: function(config) {
-      var uri = config.uri;
-      var resultIdentifier = config.resultIdentifier;
-      var itemDefinition = config.itemDefinition;
-      var deliveryUri = config.deliveryIdentifier;
+define(['taoItems/previewer/factory'], function(previewerFactory) {
+    'use strict';
 
-      var uri = {
-        uri: uri,
-        resultId: resultIdentifier,
-        itemDefinition: itemDefinition,
-        deliveryUri: deliveryUri
-      };
+    return {
+        start: function(config) {
+            var uri = config.uri;
+            var resultIdentifier = config.resultIdentifier;
+            var itemDefinition = config.itemDefinition;
+            var deliveryUri = config.deliveryIdentifier;
 
-      var type = config.type;
-      var state = config.state;
+            var uri = {
+                uri: uri,
+                resultId: resultIdentifier,
+                itemDefinition: itemDefinition,
+                deliveryUri: deliveryUri
+            };
 
-      previewerFactory(type, uri, state, {
-        readOnly: true,
-        fullPage: true,
-        hideActionBars: true
-      });
-    }
-  };
+            var type = config.type;
+            var state = config.state;
+
+            previewerFactory(type, uri, state, {
+                readOnly: true,
+                fullPage: true,
+                hideActionBars: true
+            });
+        }
+    };
 });
