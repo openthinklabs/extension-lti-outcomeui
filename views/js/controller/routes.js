@@ -1,7 +1,7 @@
 define({
-    'ItemResultPreviewer' : {
-        'actions' : {
-            'preview' : 'controller/ItemResultPreviewer/itemResultPreviewer'
+    ItemResultPreviewer: {
+        actions: {
+            preview: 'controller/ItemResultPreviewer/itemResultPreviewer'
         }
     }
 });
