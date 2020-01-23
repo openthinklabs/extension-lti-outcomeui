@@ -2,28 +2,28 @@
 // Copyright (c) 2020 (original work) Open Assessment Technologies SA ;
 
 module.exports = function(grunt) {
-  "use strict";
+    'use strict';
 
-  grunt.config.merge({
-    bundle: {
-      ltioutcomeui: {
-        options: {
-          extension: "ltiOutcomeUi",
-          outputDir: "loader",
-          dependencies: ["taoItems"],
-          bundles: [
-            {
-              name: "ltiOutcomeUi",
-              default: true,
-              babel: true,
-              bootstrap: true
+    grunt.config.merge({
+        bundle: {
+            ltioutcomeui: {
+                options: {
+                    extension: 'ltiOutcomeUi',
+                    outputDir: 'loader',
+                    dependencies: ['taoItems'],
+                    bundles: [
+                        {
+                            name: 'ltiOutcomeUi',
+                            default: true,
+                            babel: true,
+                            bootstrap: true
+                        }
+                    ]
+                }
             }
-          ]
         }
-      }
-    }
-  });
+    });
 
-  // bundle task
-  grunt.registerTask("ltioutcomeuibundle", ["bundle:ltioutcomeui"]);
+    // bundle task
+    grunt.registerTask('ltioutcomeuibundle', ['bundle:ltioutcomeui']);
 };
