@@ -1,13 +1,11 @@
-/**
- * @author Moyon Camille <camille@taotesting.com>
- */
-define([
-    'taoItems/previewer/factory'
-], function (previewerFactory) {
+// Licensed under Gnu Public Licence version 2
+// Copyright (c) 2020 (original work) Open Assessment Technologies SA ;
+
+define(['taoItems/previewer/factory'], function(previewerFactory) {
     'use strict';
 
     return {
-        start : function(config) {
+        start: function(config) {
             var uri = config.uri;
             var resultIdentifier = config.resultIdentifier;
             var itemDefinition = config.itemDefinition;
@@ -25,7 +23,8 @@ define([
 
             previewerFactory(type, uri, state, {
                 readOnly: true,
-                fullPage: true
+                fullPage: true,
+                hideActionBars: true
             });
         }
     };

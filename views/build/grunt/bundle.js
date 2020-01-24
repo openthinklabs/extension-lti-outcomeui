@@ -1,50 +1,29 @@
-module.exports = function(grunt) { 
+// Licensed under Gnu Public Licence version 2
+// Copyright (c) 2020 (original work) Open Assessment Technologies SA ;
 
-    var requirejs   = grunt.config('requirejs') || {};
-    var clean       = grunt.config('clean') || {};
-    var copy        = grunt.config('copy') || {};
+module.exports = function(grunt) {
+    'use strict';
 
-    var root        = grunt.option('root');
-    var libs        = grunt.option('mainlibs');
-    var ext         = require(root + '/tao/views/build/tasks/helpers/extensions')(grunt, root);
-    var out         = 'output';
-
-    /**
-     * Remove bundled and bundling files
-     */
-    clean.ltioutcomeuibundle = [out];
-    
-    /**
-     * Compile tao files into a bundle 
-     */
-    requirejs.ltioutcomeuibundle = {
-        options: {
-            baseUrl : '../js',
-            dir : out,
-            mainConfigFile : './config/requirejs.build.js',
-            paths : { 'ltiOutcomeUi' : root + '/ltiOutcomeUi/views/js' },
-            modules : [{
-                name: 'ltiOutcomeUi/controller/routes',
-                include : ext.getExtensionsControllers(['ltiOutcomeUi']),
-                exclude : ['mathJax'].concat(libs)
-            }]
+    grunt.config.merge({
+        bundle: {
+            ltioutcomeui: {
+                options: {
+                    extension: 'ltiOutcomeUi',
+                    outputDir: 'loader',
+                    dependencies: ['taoItems'],
+                    bundles: [
+                        {
+                            name: 'ltiOutcomeUi',
+                            default: true,
+                            babel: true,
+                            bootstrap: true
+                        }
+                    ]
+                }
+            }
         }
-    };
-
-    /**
-     * copy the bundles to the right place
-     */
-    copy.ltideliveryproviderbundle = {
-        files: [
-            { src: [out + '/ltiOutcomeUi/controller/routes.js'],  dest: root + '/ltiOutcomeUi/views/js/controllers.min.js' },
-            { src: [out + '/ltiOutcomeUi/controller/routes.js.map'],  dest: root + '/ltiOutcomeUi/views/js/controllers.min.js.map' }
-        ]
-    };
-
-    grunt.config('clean', clean);
-    grunt.config('requirejs', requirejs);
-    grunt.config('copy', copy);
+    });
 
     // bundle task
-    grunt.registerTask('ltioutcomeuibundle', ['clean:ltioutcomeuibundle', 'requirejs:ltioutcomeuibundle', 'copy:ltioutcomeuibundle']);
+    grunt.registerTask('ltioutcomeuibundle', ['bundle:ltioutcomeui']);
 };

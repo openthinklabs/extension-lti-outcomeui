@@ -100,7 +100,7 @@ class ItemResultPreviewer extends ToolModule
             $this->defaultData();
             $data['type'] = $this->getItemResultPreviewerType($resultIdentifier);
             $data['content'] = $this->getItemContent($itemDefinition, $resultIdentifier, $delivery->getUri());
-            $data['state'] = $this->getItemResultVariables($delivery, $resultIdentifier, $itemDefinition);;
+            $data['state'] = current($this->getItemResultVariables($delivery, $resultIdentifier, $itemDefinition));
             $data['itemDefinition'] = $itemDefinition;
             $data['resultIdentifier'] = $resultIdentifier;
             $data['deliveryIdentifier'] = $delivery->getUri();
