@@ -19,7 +19,6 @@
 
 namespace oat\ltiOutcomeUi\controller;
 
-use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\taoDelivery\model\execution\ServiceProxy;
@@ -30,7 +29,6 @@ use oat\taoOutcomeUi\model\ResultsService;
 use oat\taoOutcomeUi\model\ResultsViewerService;
 use oat\taoQtiTestPreviewer\models\ItemPreviewer;
 use oat\taoQtiTestPreviewer\models\PreviewLanguageService;
-use oat\taoResultServer\models\classes\ResultServerService;
 use \core_kernel_classes_Resource;
 use oat\taoLti\models\classes\LtiMessages\LtiErrorMessage;
 
