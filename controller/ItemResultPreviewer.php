@@ -29,6 +29,7 @@ use oat\taoOutcomeUi\helper\ResponseVariableFormatter;
 use oat\taoOutcomeUi\model\ResultsService;
 use oat\taoOutcomeUi\model\ResultsViewerService;
 use oat\taoQtiTestPreviewer\models\ItemPreviewer;
+use oat\taoQtiTestPreviewer\models\PreviewLanguageService;
 use oat\taoResultServer\models\classes\ResultServerService;
 use \core_kernel_classes_Resource;
 use oat\taoLti\models\classes\LtiMessages\LtiErrorMessage;
@@ -67,6 +68,7 @@ class ItemResultPreviewer extends ToolModule
                 self::PARAM_ITEM_REF => $this->getRequiredParam(self::PARAM_ITEM_REF),
             ]));
         }
+
 
         throw new LtiException(
             'You are not authorized to access this functionality.',
@@ -205,31 +207,15 @@ class ItemResultPreviewer extends ToolModule
      */
     protected function getItemContent($itemDefinition, $resultIdentifier, $deliveryIdentifier)
     {
-        return $this->getItemPreviewer()->setItemDefinition($itemDefinition)
-            ->setUserLanguage($this->getUserLanguage($resultIdentifier, $deliveryIdentifier))
+        /** @var PreviewLanguageService $previewLanguageService */
+        $previewLanguageService = $this->getServiceLocator()->get(PreviewLanguageService::class);
+        $previewLanguage = $previewLanguageService->getPreviewLanguage($deliveryIdentifier, $resultIdentifier);
+
+        return $this->getItemPreviewer()
+            ->setItemDefinition($itemDefinition)
+            ->setUserLanguage($previewLanguage)
             ->setDelivery($this->getResource($deliveryIdentifier))
             ->loadCompiledItemData();
-    }
-
-    /**
-     * Get the user language based on delivery execution
-     *
-     * @param string $resultId
-     * @param string $deliveryUri
-     * @return string
-     * @throws \common_exception_Error
-     */
-    protected function getUserLanguage($resultId, $deliveryUri)
-    {
-        /** @var ResultServerService $resultServerService */
-        $resultServerService = $this->getServiceLocator()->get(ResultServerService::SERVICE_ID);
-        /** @var \taoResultServer_models_classes_ReadableResultStorage $implementation */
-        $implementation = $resultServerService->getResultStorage($deliveryUri);
-
-        $testTaker = new \core_kernel_users_GenerisUser($this->getResource($implementation->getTestTaker($resultId)));
-        $lang = $testTaker->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
-
-        return empty($lang) ? DEFAULT_LANG : (string) current($lang);
     }
 
     /**
