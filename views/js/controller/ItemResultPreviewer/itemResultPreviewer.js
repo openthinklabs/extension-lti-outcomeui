@@ -22,7 +22,7 @@ define(['taoItems/previewer/factory'], function(previewerFactory) {
             var state = config.state;
 
             previewerFactory(type, uri, state, {
-                readOnly: true,
+                view: 'scorer',
                 fullPage: true,
                 hideActionBars: true
             });
