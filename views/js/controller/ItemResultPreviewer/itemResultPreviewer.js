@@ -4,6 +4,14 @@
 define(['taoItems/previewer/factory'], function(previewerFactory) {
     'use strict';
 
+    const plugins = [
+        {
+            module: 'taoQtiTestPreviewer/previewer/plugins/content/scoringHighlighter',
+            bundle: 'taoQtiTestPreviewer/loader/qtiPreviewer.min',
+            category: 'content'
+        }
+    ];
+
     return {
         start: function(config) {
             var uri = config.uri;
@@ -24,7 +32,8 @@ define(['taoItems/previewer/factory'], function(previewerFactory) {
             previewerFactory(type, uri, state, {
                 view: 'scorer',
                 fullPage: true,
-                hideActionBars: true
+                hideActionBars: true,
+                plugins
             });
         }
     };
