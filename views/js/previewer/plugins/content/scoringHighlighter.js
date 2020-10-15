@@ -24,9 +24,9 @@ define([
     'i18n',
     'ui/hider',
     'taoTests/runner/plugin',
-    'tpl!taoQtiTestPreviewer/previewer/plugins/content/tpl/highlighter-tray',
+    'tpl!ltiOutcomeUi/previewer/plugins/content/tpl/highlighter-tray',
     'ui/highlighter',
-    'css!taoQtiTestPreviewer/previewer/plugins/content/css/highlighterTray.css'
+    'css!ltiOutcomeUi/previewer/plugins/content/css/highlighterTray.css'
 ], function ($, __, hider, pluginFactory, highlighterTrayTpl, highlighterFactory) {
     'use strict';
 
