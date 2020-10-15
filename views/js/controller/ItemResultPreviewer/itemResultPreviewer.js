@@ -6,8 +6,8 @@ define(['taoItems/previewer/factory'], function(previewerFactory) {
 
     const plugins = [
         {
-            module: 'taoQtiTestPreviewer/previewer/plugins/content/scoringHighlighter',
-            bundle: 'taoQtiTestPreviewer/loader/qtiPreviewer.min',
+            module: 'ltiOutcomeUi/previewer/plugins/content/scoringHighlighter',
+            bundle: 'ltiOutcomeUi/loader/ltiOutcomeUi.min',
             category: 'content'
         }
     ];
