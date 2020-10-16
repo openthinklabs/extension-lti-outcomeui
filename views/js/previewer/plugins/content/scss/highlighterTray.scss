@@ -4,25 +4,25 @@
     $pinkHighlightColor: #FFBDF5;
     $blueHighlightColor: #A3D7FF;
 
-    --highlighter-tray-width: 30rem;
-    --highlighter-tray-height: 4.5rem;
-    --highlighter-offset: 30px;
-    --color-button-size: 16px;
-    --color-button-hover-size: 24px;
+    $highlighterTrayWidth: 30rem;
+    $highlighterTrayHeight: 4.5rem;
+    $highlighterOffset: 30px;
+    $colorButtonSize: 16px;
+    $colorButtonHoverSize: 24px;
 
     position: relative;
-    min-height: var(--highlighter-tray-height);
-    height: var(--highlighter-tray-height);
-    left: calc(100% - var(--highlighter-tray-width) - var(--highlighter-offset));
-    top: calc(var(--highlighter-offset) / 2);
+    min-height: $highlighterTrayHeight;
+    height: $highlighterTrayHeight;
+    left: calc(100% - 30rem - 30px);
+    top: 15px;
     z-index: 1;
 
     & .highlighter-tray {
         border-radius: 8px;
         padding: 1rem;
-        width: var(--highlighter-tray-width);
+        width: $highlighterTrayWidth;
         height: 100%;
-        margin-right: var(--highlighter-offset);
+        margin-right: $highlighterOffset;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -47,17 +47,17 @@
         }
 
         & .color-button {
-            border-radius: var(--color-button-size);
-            height: var(--color-button-size);
-            width: var(--color-button-size);
-            min-width: var(--color-button-size);
+            border-radius: $colorButtonSize;
+            height: $colorButtonSize;
+            width: $colorButtonSize;
+            min-width: $colorButtonSize;
             border: transparent;
             cursor: pointer;
 
             &:hover {
-                border-radius: var(--color-button-hover-size);
-                height: var(--color-button-hover-size);
-                width: var(--color-button-hover-size);
+                border-radius: $colorButtonHoverSize;
+                height: $colorButtonHoverSize;
+                width: $colorButtonHoverSize;
             }
 
             &:focus {

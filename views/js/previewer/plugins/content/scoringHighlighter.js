@@ -60,9 +60,6 @@ define([
         init() {
             const testRunner = this.getTestRunner();
 
-            if (!window.getSelection) {
-                throw new Error('Browser does not support getSelection()');
-            }
             this.selection = window.getSelection();
 
             this.eventListener = e => {
