@@ -1,80 +1,110 @@
 .highlighter-container {
-    $highlighterBackground: #1F1F1F;
-    $ocherHighlightColor: #FFE957;
-    $pinkHighlightColor: #FFBDF5;
-    $blueHighlightColor: #A3D7FF;
-
-    $highlighterTrayWidth: 30rem;
-    $highlighterTrayHeight: 4.5rem;
-    $highlighterOffset: 30px;
-    $colorButtonSize: 16px;
-    $colorButtonHoverSize: 24px;
+    $highlighterTrayHeight: 4.4rem;
 
     position: relative;
     min-height: $highlighterTrayHeight;
+    width: 30rem;
     height: $highlighterTrayHeight;
     left: calc(100% - 30rem - 30px);
     top: 15px;
     z-index: 1;
+}
 
-    & .highlighter-tray {
-        border-radius: 8px;
-        padding: 1rem;
-        width: $highlighterTrayWidth;
-        height: 100%;
-        margin-right: $highlighterOffset;
+.highlighter-tray {
+    $highlighterBackground: #1f1f1f;
+    $ocherHighlightColor: #ffe957;
+    $pinkHighlightColor: #ffbdf5;
+    $blueHighlightColor: #a3d7ff;
+
+    $highlighterTrayWidth: 30rem;
+    $highlighterOffset: 30px;
+    $colorButtonSize: 16px;
+    $colorButtonHoverSize: 24px;
+
+    border-radius: 8px;
+    width: $highlighterTrayWidth;
+    height: 100%;
+    margin-right: $highlighterOffset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $highlighterBackground;
+
+    & .highlighter-title {
+        text-transform: uppercase;
+        color: white;
+        border: none;
+        margin: 0 1rem;
+    }
+
+    & .items {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        background-color: $highlighterBackground;
+    }
 
-        & .highlighter-title {
-            text-transform: uppercase;
-            color: white;
-            border: none;
-            margin-right: 1rem;
+    & .icon-eraser {
+        color: white;
+        background: transparent;
+        padding: 0;
+        width: 4.4rem;
+        height: 4.4rem;
+
+        &:before {
+            font-size: 1.6rem;
+        }
+    }
+
+    & .color-item {
+        width: 4.4rem;
+        height: 4.4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & .eraser-on {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 17px;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+    }
+
+    & .color-button {
+        border-radius: $colorButtonSize;
+        height: $colorButtonSize;
+        width: $colorButtonSize;
+        min-width: $colorButtonSize;
+        border: transparent;
+        cursor: pointer;
+
+        &:hover {
+            border-radius: $colorButtonHoverSize;
+            height: $colorButtonHoverSize;
+            width: $colorButtonHoverSize;
         }
 
-        & .icon-eraser {
-            color: white;
-            background: transparent;
+        &:focus {
+            border: transparent !important;
         }
+    }
 
-        & .color-item {
-            flex-basis: 33.3%;
-            display: flex;
-            justify-content: center;
-        }
+    & .ocher-color {
+        background-color: $ocherHighlightColor;
+    }
 
-        & .color-button {
-            border-radius: $colorButtonSize;
-            height: $colorButtonSize;
-            width: $colorButtonSize;
-            min-width: $colorButtonSize;
-            border: transparent;
-            cursor: pointer;
+    & .pink-color {
+        background-color: $pinkHighlightColor;
+    }
 
-            &:hover {
-                border-radius: $colorButtonHoverSize;
-                height: $colorButtonHoverSize;
-                width: $colorButtonHoverSize;
-            }
-
-            &:focus {
-                border: transparent !important;
-            }
-        }
-
-        & .ocher-color {
-            background-color: $ocherHighlightColor;
-        }
-
-        & .pink-color {
-            background-color: $pinkHighlightColor;
-        }
-
-        & .blue-color {
-            background-color: $blueHighlightColor;
-        }
+    & .blue-color {
+        background-color: $blueHighlightColor;
     }
 }
