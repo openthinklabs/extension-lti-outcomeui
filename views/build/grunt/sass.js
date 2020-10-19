@@ -1,9 +1,8 @@
 module.exports = function(grunt) {
     'use strict';
 
-    var root    = grunt.option('root') + '/ltioutcomeui/views/';
+    const root = grunt.option('root') + '/ltioutcomeui/views/';
 
-    let css = 'themes/platform/default/theme';
     grunt.config.merge({
         sass: {
             ltioutcomeui: {
