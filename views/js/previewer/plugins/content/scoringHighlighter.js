@@ -112,9 +112,10 @@ define([
             /**
              * Toggles the eraser mode
              * 
-             * @param {Boolean} toggle - toggles the eraser mode
+             * @param {jQueryElement} $eraser 
+             * @param {Boolean} isEraserOn 
              */
-            thia.toggleEraser = (isEraserOn) => {
+            this.toggleEraser = ($eraser, isEraserOn) => {
                 if (isEraserOn) {
                     $eraser.addClass('eraser-on');
                     $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
@@ -122,9 +123,7 @@ define([
                     $eraser.removeClass('eraser-on');
                     $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
                 }
-            };
-
-            
+            };            
 
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
@@ -149,7 +148,7 @@ define([
                 e.preventDefault();
                 
                 isEraserOn = !isEraserOn;
-                this.toggleEraser(isEraserOn);
+                this.toggleEraser($eraser, isEraserOn);
             });
 
             $color.on('click', e => {
@@ -157,7 +156,7 @@ define([
                 
                 if (isEraserOn) {
                     isEraserOn = false;
-                    this.toggleEraser(isEraserOn);
+                    this.toggleEraser($eraser, isEraserOn);
                 }
                 
                 this.highlight(this.selection);
