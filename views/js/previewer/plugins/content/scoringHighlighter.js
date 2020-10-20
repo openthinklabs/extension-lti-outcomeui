@@ -71,7 +71,7 @@ define([
             );
 
             /**
-             * Gets the renges of the selection
+             * Gets the ranges of the selection
              * 
              * @param {*} selection 
              */
@@ -85,12 +85,12 @@ define([
             }
 
             /**
-             * Erases highlights and updates highlightIndex
+             * Erases highlights and notifies the parent iframe
              * 
              * @param {Event} e - Click event
              */
             function clearHighlightAndSave(e) {
-                highlighter.clearSingleHighlight(e)
+                highlighter.clearSingleHighlight(e);
 
                 //Sending the highlighIndex to parent so that it can be saved on MS side
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
@@ -114,13 +114,17 @@ define([
              * 
              * @param {Boolean} toggle - toggles the eraser mode
              */
-            this.toggleEraserMode = (toggle) => {
-                if(toggle) {
+            thia.toggleEraser = (isEraserOn) => {
+                if (isEraserOn) {
+                    $eraser.addClass('eraser-on');
                     $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
                 } else {
+                    $eraser.removeClass('eraser-on');
                     $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
                 }
-            }
+            };
+
+            
 
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
@@ -141,29 +145,19 @@ define([
             const $color = $container.find('.color-button');
             let isEraserOn = false;
 
-            const toggleEraser = (isEraserOn) => {
-                if (isEraserOn) {
-                    $eraser.addClass('eraser-on');
-                    this.toggleEraserMode(true);
-                } else {
-                    $eraser.removeClass('eraser-on');
-                    this.toggleEraserMode(false);
-                }
-            };
-
             $eraser.on('click', e => {
                 e.preventDefault();
                 
                 isEraserOn = !isEraserOn;
-                toggleEraser(isEraserOn);
+                this.toggleEraser(isEraserOn);
             });
 
             $color.on('click', e => {
                 e.preventDefault();
                 
-                if(isEraserOn) {
+                if (isEraserOn) {
                     isEraserOn = false;
-                    toggleEraser(isEraserOn);
+                    this.toggleEraser(isEraserOn);
                 }
                 
                 this.highlight(this.selection);

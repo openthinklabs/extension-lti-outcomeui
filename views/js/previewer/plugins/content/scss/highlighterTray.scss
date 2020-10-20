@@ -1,11 +1,9 @@
-.highlighter-container {
-    $highlighterTrayHeight: 4.4rem;
+$highlighterTrayWidth: 30rem;
+$highlighterOffset: 30px;
 
+.highlighter-container {
     position: relative;
-    min-height: $highlighterTrayHeight;
-    width: 30rem;
-    height: $highlighterTrayHeight;
-    left: calc(100% - 30rem - 30px);
+    left: calc(100% - #{$highlighterTrayWidth} - #{$highlighterOffset});
     top: 15px;
     z-index: 1;
 }
@@ -16,10 +14,9 @@
     $pinkHighlightColor: #ffbdf5;
     $blueHighlightColor: #a3d7ff;
 
-    $highlighterTrayWidth: 30rem;
-    $highlighterOffset: 30px;
-    $colorButtonSize: 16px;
-    $colorButtonHoverSize: 24px;
+    $highlighterTrayHeight: 4.4rem;
+    $colorButtonSize: 1.6rem;
+    $colorButtonHoverSize: 2.4rem;
 
     border-radius: 8px;
     width: $highlighterTrayWidth;
@@ -46,8 +43,8 @@
         color: white;
         background: transparent;
         padding: 0;
-        width: 4.4rem;
-        height: 4.4rem;
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
 
         &:before {
             font-size: 1.6rem;
@@ -55,8 +52,8 @@
     }
 
     & .color-item {
-        width: 4.4rem;
-        height: 4.4rem;
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -71,7 +68,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 17px;
+            padding: 1.6rem;
             border: 2px solid white;
             border-radius: 50%;
         }
