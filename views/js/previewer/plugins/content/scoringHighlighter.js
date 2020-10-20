@@ -30,27 +30,6 @@ define([
 ], function ($, __, hider, pluginFactory, highlighterTrayTpl, highlighterFactory) {
     'use strict';
 
-    function highlight(highlighter, selection) {
-        highlighter.highlightRanges(getAllRanges(selection));
-        //Sending the highlighIndex to parent so that it can be saved on MS side
-        selection.removeAllRanges();
-        window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
-    }
-
-    function clearHighlights(highlighter) {
-        highlighter.clearHighlights();
-        window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
-    }
-
-    function getAllRanges(selection) {
-        const allRanges = [];
-
-        for (let i = 0; i < selection.rangeCount; i++) {
-            allRanges.push(selection.getRangeAt(i));
-        }
-        return allRanges;
-    }
-
     return pluginFactory({
         name: 'highlighter',
 
@@ -59,13 +38,21 @@ define([
          */
         init() {
             const testRunner = this.getTestRunner();
-
             this.selection = window.getSelection();
+
+            const CLASS_NAME =  'txt-user-highlight';
+            const CONTAINER_SELECTOR = '.qti-itemBody';
+
+            const highlighter = highlighterFactory({
+                className: CLASS_NAME,
+                containerSelector: CONTAINER_SELECTOR,
+                containersBlackList: []
+            });
 
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
                     // Applying any highlighIndex received from parent
-                    this.highlighter.highlightFromIndex(e.data.payload);
+                    highlighter.highlightFromIndex(e.data.payload);
                 } else if (this.$highlighterTray) {
                     if (e.data.event === 'hide') {
                         this.hide();
@@ -75,12 +62,6 @@ define([
                 }
             };
 
-            this.highlighter = highlighterFactory({
-                className: 'txt-user-highlight',
-                containerSelector: '.qti-itemBody',
-                containersBlackList: []
-            });
-
             window.addEventListener('message', this.eventListener);
 
             this.$highlighterTray = $(
@@ -88,6 +69,61 @@ define([
                     label: __('highlighter')
                 })
             );
+
+            /**
+             * Gets the ranges of the selection
+             * 
+             * @param {*} selection 
+             */
+            function getAllRanges(selection) {
+                const allRanges = [];
+
+                for (let i = 0; i < selection.rangeCount; i++) {
+                    allRanges.push(selection.getRangeAt(i));
+                }
+                return allRanges;
+            }
+
+            /**
+             * Erases highlights and notifies the parent iframe
+             * 
+             * @param {Event} e - Click event
+             */
+            function clearHighlightAndSave(e) {
+                highlighter.clearSingleHighlight(e);
+
+                //Sending the highlighIndex to parent so that it can be saved on MS side
+                window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
+            }
+
+            /**
+             * Highlights the selection and notifies the parent iframe
+             * 
+             * @param {*} selection 
+             */
+            this.highlight = (selection) => {
+                highlighter.highlightRanges(getAllRanges(selection));
+
+                //Sending the highlighIndex to parent so that it can be saved on MS side
+                selection.removeAllRanges();
+                window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
+            };
+
+            /**
+             * Toggles the eraser mode
+             * 
+             * @param {jQueryElement} $eraser 
+             * @param {Boolean} isEraserOn 
+             */
+            this.toggleEraser = ($eraser, isEraserOn) => {
+                if (isEraserOn) {
+                    $eraser.addClass('eraser-on');
+                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
+                } else {
+                    $eraser.removeClass('eraser-on');
+                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
+                }
+            };            
 
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
@@ -105,15 +141,25 @@ define([
             this.hide();
 
             const $eraser = $container.find('button.icon-eraser');
+            const $color = $container.find('.color-button');
+            let isEraserOn = false;
+
             $eraser.on('click', e => {
                 e.preventDefault();
-                clearHighlights(this.highlighter, this.selection);
+                
+                isEraserOn = !isEraserOn;
+                this.toggleEraser($eraser, isEraserOn);
             });
 
-            const $color = $container.find('.color-button');
             $color.on('click', e => {
                 e.preventDefault();
-                highlight(this.highlighter, this.selection);
+                
+                if (isEraserOn) {
+                    isEraserOn = false;
+                    this.toggleEraser($eraser, isEraserOn);
+                }
+                
+                this.highlight(this.selection);
             });
         },
 
