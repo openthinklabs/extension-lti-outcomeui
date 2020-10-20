@@ -47,7 +47,7 @@ $highlighterOffset: 30px;
         height: $highlighterTrayHeight;
 
         &:before {
-            font-size: 1.6rem;
+            font-size: $colorButtonSize;
         }
     }
 
