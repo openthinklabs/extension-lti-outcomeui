@@ -1,0 +1,107 @@
+$highlighterTrayWidth: 30rem;
+$highlighterOffset: 30px;
+
+.highlighter-container {
+    position: relative;
+    left: calc(100% - #{$highlighterTrayWidth} - #{$highlighterOffset});
+    top: 15px;
+    z-index: 1;
+}
+
+.highlighter-tray {
+    $highlighterBackground: #1f1f1f;
+    $ocherHighlightColor: #ffe957;
+    $pinkHighlightColor: #ffbdf5;
+    $blueHighlightColor: #a3d7ff;
+
+    $highlighterTrayHeight: 4.4rem;
+    $colorButtonSize: 1.6rem;
+    $colorButtonHoverSize: 2.4rem;
+
+    border-radius: 8px;
+    width: $highlighterTrayWidth;
+    height: 100%;
+    margin-right: $highlighterOffset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $highlighterBackground;
+
+    & .highlighter-title {
+        text-transform: uppercase;
+        color: white;
+        border: none;
+        margin: 0 1rem;
+    }
+
+    & .items {
+        display: flex;
+        align-items: center;
+    }
+
+    & .icon-eraser {
+        color: white;
+        background: transparent;
+        padding: 0;
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
+
+        &:before {
+            font-size: $colorButtonSize;
+        }
+    }
+
+    & .color-item {
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & .eraser-on {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1.6rem;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+    }
+
+    & .color-button {
+        border-radius: $colorButtonSize;
+        height: $colorButtonSize;
+        width: $colorButtonSize;
+        min-width: $colorButtonSize;
+        border: transparent;
+        cursor: pointer;
+
+        &:hover {
+            border-radius: $colorButtonHoverSize;
+            height: $colorButtonHoverSize;
+            width: $colorButtonHoverSize;
+        }
+
+        &:focus {
+            border: transparent !important;
+        }
+    }
+
+    & .ocher-color {
+        background-color: $ocherHighlightColor;
+    }
+
+    & .pink-color {
+        background-color: $pinkHighlightColor;
+    }
+
+    & .blue-color {
+        background-color: $blueHighlightColor;
+    }
+}
