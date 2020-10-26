@@ -8,6 +8,10 @@ $highlighterOffset: 30px;
     z-index: 1;
 }
 
+.erase {
+    cursor: url('../assets/icons/eraser-16.png'), auto;
+}
+
 .highlighter-tray {
     $highlighterBackground: #1f1f1f;
     $ocherHighlightColor: #ffe957;
@@ -15,8 +19,8 @@ $highlighterOffset: 30px;
     $blueHighlightColor: #a3d7ff;
 
     $highlighterTrayHeight: 4.4rem;
-    $colorButtonSize: 1.6rem;
-    $colorButtonHoverSize: 2.4rem;
+    $actionButtonSize: 1.6rem;
+    $actionButtonHoverSize: 2.4rem;
 
     border-radius: 8px;
     width: $highlighterTrayWidth;
@@ -47,7 +51,11 @@ $highlighterOffset: 30px;
         height: $highlighterTrayHeight;
 
         &:before {
-            font-size: $colorButtonSize;
+            font-size: $actionButtonSize;
+        }
+
+        &:hover:before {
+            font-size: $actionButtonHoverSize;
         }
     }
 
@@ -62,6 +70,10 @@ $highlighterOffset: 30px;
     & .eraser-on {
         position: relative;
 
+        &:hover:before {
+            font-size: $actionButtonSize;
+        }
+
         &:after {
             content: '';
             position: absolute;
@@ -75,17 +87,17 @@ $highlighterOffset: 30px;
     }
 
     & .color-button {
-        border-radius: $colorButtonSize;
-        height: $colorButtonSize;
-        width: $colorButtonSize;
-        min-width: $colorButtonSize;
+        border-radius: $actionButtonSize;
+        height: $actionButtonSize;
+        width: $actionButtonSize;
+        min-width: $actionButtonSize;
         border: transparent;
         cursor: pointer;
 
         &:hover {
-            border-radius: $colorButtonHoverSize;
-            height: $colorButtonHoverSize;
-            width: $colorButtonHoverSize;
+            border-radius: $actionButtonHoverSize;
+            height: $actionButtonHoverSize;
+            width: $actionButtonHoverSize;
         }
 
         &:focus {
