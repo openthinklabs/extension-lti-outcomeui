@@ -84,7 +84,7 @@ define([
              * @param {*} index - highlight index
              */
             this.updateHashighlights = (index) => {
-                this.hasHighlights  = index.some(highlight => highlight.highlighted === true);
+                this.hasHighlights = index.some(highlight => highlight.highlighted === true);
             }
 
             /**
@@ -142,10 +142,11 @@ define([
                     if (turnOnEraser) {
                         $eraser.addClass('eraser-on');
                         $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).addClass('erase');
+                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).addClass('can-erase');
                     } else {
                         $eraser.removeClass('eraser-on');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
+                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
+                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).removeClass('can-erase');
                     }
                 }
                 
