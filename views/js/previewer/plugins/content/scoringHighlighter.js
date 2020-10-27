@@ -141,12 +141,10 @@ define([
                 if (this.hasHighlights) {
                     if (turnOnEraser) {
                         $eraser.addClass('eraser-on');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).addClass('can-erase');
+                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave).addClass('can-erase');
                     } else {
                         $eraser.removeClass('eraser-on');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).removeClass('can-erase');
+                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').removeClass('can-erase');
                     }
                 }
                 
