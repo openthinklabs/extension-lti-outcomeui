@@ -25,7 +25,7 @@ return array(
     'label' => 'LTI Result Tool Provider',
     'description' => 'The LTI Result Tool Provider allows third party applications to view results created in Tao',
     'license' => 'GPL-2.0',
-    'version' => '0.7.0',
+    'version' => '0.7.1',
     'author' => 'Open Assessment Technologies',
     'requires' => array(
         'taoLti' => '>=6.3.3',
