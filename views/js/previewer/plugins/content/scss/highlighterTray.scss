@@ -3,6 +3,7 @@ $highlighterOffset: 30px;
 
 .highlighter-container {
     position: relative;
+    width: $highlighterTrayWidth;
     left: calc(100% - #{$highlighterTrayWidth} - #{$highlighterOffset});
     top: 15px;
     z-index: 1;

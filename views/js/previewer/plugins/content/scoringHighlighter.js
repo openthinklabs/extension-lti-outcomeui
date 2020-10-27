@@ -39,7 +39,6 @@ define([
         init() {
             const testRunner = this.getTestRunner();
             this.selection = window.getSelection();
-            this.hasHighlights = false;
 
             const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
@@ -52,15 +51,8 @@ define([
 
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
-                    if(e.data.payload) {
-                        this.updateHashighlights(e.data.payload);
-                    }
-                    
-                    if (this.hasHighlights) {
-                        // Applying any highlighIndex received from parent
-                        highlighter.highlightFromIndex(e.data.payload);
-                    }
-                    
+                    // Applying any highlighIndex received from parent
+                    highlighter.highlightFromIndex(e.data.payload);
                 } else if (this.$highlighterTray) {
                     if (e.data.event === 'hide') {
                         this.hide();
@@ -77,15 +69,6 @@ define([
                     label: __('highlighter')
                 })
             );
-
-            /**
-             * Checks if the highlgiht index has any highlights
-             * 
-             * @param {*} index - highlight index
-             */
-            this.updateHashighlights = (index) => {
-                this.hasHighlights = index.some(highlight => highlight.highlighted === true);
-            }
 
             /**
              * Gets the ranges of the selection
@@ -112,7 +95,6 @@ define([
                 //Sending the highlighIndex to parent so that it can be saved on MS side
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
-                this.updateHashighlights(highlightIndex);
             }
 
             /**
@@ -127,7 +109,6 @@ define([
                 selection.removeAllRanges();
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
-                this.updateHashighlights(highlightIndex);
             };
 
             /**
@@ -138,16 +119,15 @@ define([
              */
             this.toggleEraser = ($eraser, turnOnEraser) => {
                 // Only turn on eraser if there are highlights
-                if (this.hasHighlights) {
-                    if (turnOnEraser) {
-                        $eraser.addClass('eraser-on');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave).addClass('can-erase');
-                    } else {
-                        $eraser.removeClass('eraser-on');
-                        $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').removeClass('can-erase');
-                    }
+                if (turnOnEraser) {
+                    $eraser.addClass('eraser-on');
+                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
+                        .on('click', (e) => clearHighlightAndSave(e, $eraser))
+                        .addClass('can-erase');
+                } else {
+                    $eraser.removeClass('eraser-on');
+                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').removeClass('can-erase');
                 }
-                
             };            
 
             testRunner.after('renderitem', function () {
