@@ -39,6 +39,9 @@ define([
         init() {
             const testRunner = this.getTestRunner();
             this.selection = window.getSelection();
+            
+            this.isEraserOn = false;
+            this.hasHighlights = false;
 
             const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
@@ -51,8 +54,14 @@ define([
 
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
+                    if(e.data.payload) {	                    
+                        this.updateHashighlights(e.data.payload);
+                    }
+
                     // Applying any highlighIndex received from parent
-                    highlighter.highlightFromIndex(e.data.payload);
+                    if (this.hasHighlights) {
+                        highlighter.highlightFromIndex(e.data.payload);
+                    }
                 } else if (this.$highlighterTray) {
                     if (e.data.event === 'hide') {
                         this.hide();
@@ -84,6 +93,15 @@ define([
                 return allRanges;
             }
 
+            /**	
+             * Checks if the highlgiht index has any highlights	
+             * 	
+             * @param {*} index - highlight index	
+             */	
+            this.updateHashighlights = (index) => {	
+                this.hasHighlights = index.some(highlight => highlight.highlighted === true);	
+            }
+
             /**
              * Erases highlights and notifies the parent iframe
              * 
@@ -95,6 +113,11 @@ define([
                 //Sending the highlighIndex to parent so that it can be saved on MS side
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
+                this.updateHashighlights(highlightIndex);                
+
+                if(!this.hasHighlights) {
+                    turnEraserOff();
+                }
             }
 
             /**
@@ -109,26 +132,34 @@ define([
                 selection.removeAllRanges();
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
+                this.updateHashighlights(highlightIndex);
             };
+
+            const turnEraserOn = () => {
+                this.$controls.$eraser.addClass('eraser-on');
+                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
+                $(CONTAINER_SELECTOR).addClass('can-erase');
+                this.isEraserOn = true;
+            }
+
+            const turnEraserOff = () => {
+                this.$controls.$eraser.removeClass('eraser-on');
+                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
+                $(CONTAINER_SELECTOR).removeClass('can-erase');
+                this.isEraserOn = false;
+            }
 
             /**
              * Toggles the eraser mode
              * 
-             * @param {jQueryElement} $eraser 
-             * @param {Boolean} isEraserOn 
+             * @param {Boolean} isOn 
              */
-            this.toggleEraser = ($eraser, turnOnEraser) => {
+            this.toggleEraser = () => {
                 // Only turn on eraser if there are highlights
-                if (turnOnEraser) {
-                    $eraser.addClass('eraser-on');
-                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
-                        .on('click', (e) => clearHighlightAndSave(e, $eraser))
-                        .addClass('can-erase');
-                } else {
-                    $eraser.removeClass('eraser-on');
-                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').removeClass('can-erase');
+                if (this.hasHighlights) {
+                    this.isEraserOn ? turnEraserOff() : turnEraserOn()
                 }
-            };            
+            };
 
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
@@ -145,23 +176,21 @@ define([
             //hide highlighter menu by default
             this.hide();
 
-            const $eraser = $container.find('button.icon-eraser');
-            const $color = $container.find('.color-button');
-            let turnOnEraser = false;
+            this.$controls = {
+                $eraser: $container.find('button.icon-eraser'),
+                $color: $container.find('.color-button')
+            }
 
-            $eraser.on('click', e => {
+            this.$controls.$eraser.on('click', e => {
                 e.preventDefault();
-                
-                turnOnEraser = !turnOnEraser;
-                this.toggleEraser($eraser, turnOnEraser);
+                this.toggleEraser();
             });
 
-            $color.on('click', e => {
+            this.$controls.$color.on('click', e => {
                 e.preventDefault();
                 
-                if (turnOnEraser) {
-                    turnOnEraser = false;
-                    this.toggleEraser($eraser, turnOnEraser);
+                if (this.isEraserOn) {
+                    this.toggleEraser();
                 }
                 
                 this.highlight(this.selection);
