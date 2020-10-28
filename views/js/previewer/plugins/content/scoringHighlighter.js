@@ -135,6 +135,9 @@ define([
                 this.updateHashighlights(highlightIndex);
             };
 
+            /**
+             * Turns on the eraser and adds the cursor
+             */
             const turnEraserOn = () => {
                 this.$controls.$eraser.addClass('eraser-on');
                 $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
@@ -142,6 +145,9 @@ define([
                 this.isEraserOn = true;
             }
 
+            /**
+             * Turns off the eraser and removes the cursor
+             */
             const turnEraserOff = () => {
                 this.$controls.$eraser.removeClass('eraser-on');
                 $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
