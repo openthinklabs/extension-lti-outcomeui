@@ -122,7 +122,7 @@ define([
                 saveHighlights()
 
                 if(!this.hasHighlights) {
-                    turnEraserOff();
+                    this.turnEraserOff();
                 }
             }
 
