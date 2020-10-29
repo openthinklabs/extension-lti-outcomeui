@@ -55,7 +55,7 @@ define([
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
                     if(e.data.payload) {	                    
-                        this.updateHashighlights(e.data.payload);
+                        this.updateHasHighlights(e.data.payload);
                     }
 
                     // Applying any highlighIndex received from parent
@@ -65,6 +65,7 @@ define([
                 } else if (this.$highlighterTray) {
                     if (e.data.event === 'hide') {
                         this.hide();
+                        this.turnEraserOff();
                     } else if (e.data.event === 'show') {
                         this.show();
                     }
@@ -94,12 +95,21 @@ define([
             }
 
             /**	
-             * Checks if the highlgiht index has any highlights	
+             * Update highlgihting status
              * 	
-             * @param {*} index - highlight index	
+             * @param {Object[]} highlightIndex - Highlight index	
              */	
-            this.updateHashighlights = (index) => {	
-                this.hasHighlights = index.some(highlight => highlight.highlighted === true);	
+            this.updateHasHighlights = (highlightIndex) => {	
+                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);	
+            }
+
+            /**
+             * Sends the highlighIndex to parent and updates hasHighlights
+             */
+            const saveHighlights = () => {
+                const highlightIndex = highlighter.getHighlightIndex();
+                window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
+                this.updateHasHighlights(highlightIndex);                
             }
 
             /**
@@ -109,11 +119,7 @@ define([
              */
             const clearHighlightAndSave = (e) => {
                 highlighter.clearSingleHighlight(e);
-
-                //Sending the highlighIndex to parent so that it can be saved on MS side
-                const highlightIndex = highlighter.getHighlightIndex();
-                window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
-                this.updateHashighlights(highlightIndex);                
+                saveHighlights()
 
                 if(!this.hasHighlights) {
                     turnEraserOff();
@@ -128,17 +134,14 @@ define([
             this.highlight = (selection) => {
                 highlighter.highlightRanges(getAllRanges(selection));
 
-                //Sending the highlighIndex to parent so that it can be saved on MS side
                 selection.removeAllRanges();
-                const highlightIndex = highlighter.getHighlightIndex();
-                window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
-                this.updateHashighlights(highlightIndex);
+                saveHighlights()                
             };
 
             /**
              * Turns on the eraser and adds the cursor
              */
-            const turnEraserOn = () => {
+            this.turnEraserOn = () => {
                 this.$controls.$eraser.addClass('eraser-on');
                 $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
                 $(CONTAINER_SELECTOR).addClass('can-erase');
@@ -148,7 +151,7 @@ define([
             /**
              * Turns off the eraser and removes the cursor
              */
-            const turnEraserOff = () => {
+            this.turnEraserOff = () => {
                 this.$controls.$eraser.removeClass('eraser-on');
                 $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
                 $(CONTAINER_SELECTOR).removeClass('can-erase');
@@ -163,7 +166,7 @@ define([
             this.toggleEraser = () => {
                 // Only turn on eraser if there are highlights
                 if (this.hasHighlights) {
-                    this.isEraserOn ? turnEraserOff() : turnEraserOn()
+                    this.isEraserOn ? this.turnEraserOff() : this.turnEraserOn()
                 }
             };
 
