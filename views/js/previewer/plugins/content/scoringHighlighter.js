@@ -39,6 +39,9 @@ define([
         init() {
             const testRunner = this.getTestRunner();
             this.selection = window.getSelection();
+            
+            this.isEraserOn = false;
+            this.hasHighlights = false;
 
             const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
@@ -51,11 +54,18 @@ define([
 
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
+                    if(e.data.payload) {	                    
+                        this.updateHasHighlights(e.data.payload);
+                    }
+
                     // Applying any highlighIndex received from parent
-                    highlighter.highlightFromIndex(e.data.payload);
+                    if (this.hasHighlights) {
+                        highlighter.highlightFromIndex(e.data.payload);
+                    }
                 } else if (this.$highlighterTray) {
                     if (e.data.event === 'hide') {
                         this.hide();
+                        this.turnEraserOff();
                     } else if (e.data.event === 'show') {
                         this.show();
                     }
@@ -84,16 +94,36 @@ define([
                 return allRanges;
             }
 
+            /**	
+             * Update highlgihting status
+             * 	
+             * @param {Object[]} highlightIndex - Highlight index	
+             */	
+            this.updateHasHighlights = (highlightIndex) => {	
+                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);	
+            }
+
+            /**
+             * Sends the highlighIndex to parent and updates hasHighlights
+             */
+            const saveHighlights = () => {
+                const highlightIndex = highlighter.getHighlightIndex();
+                window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
+                this.updateHasHighlights(highlightIndex);                
+            }
+
             /**
              * Erases highlights and notifies the parent iframe
              * 
              * @param {Event} e - Click event
              */
-            function clearHighlightAndSave(e) {
+            const clearHighlightAndSave = (e) => {
                 highlighter.clearSingleHighlight(e);
+                saveHighlights()
 
-                //Sending the highlighIndex to parent so that it can be saved on MS side
-                window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
+                if(!this.hasHighlights) {
+                    this.turnEraserOff();
+                }
             }
 
             /**
@@ -104,26 +134,41 @@ define([
             this.highlight = (selection) => {
                 highlighter.highlightRanges(getAllRanges(selection));
 
-                //Sending the highlighIndex to parent so that it can be saved on MS side
                 selection.removeAllRanges();
-                window.parent.postMessage({ event: 'indexUpdated', payload: highlighter.getHighlightIndex() }, '*');
+                saveHighlights()                
             };
+
+            /**
+             * Turns on the eraser and adds the cursor
+             */
+            this.turnEraserOn = () => {
+                this.$controls.$eraser.addClass('eraser-on');
+                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
+                $(CONTAINER_SELECTOR).addClass('can-erase');
+                this.isEraserOn = true;
+            }
+
+            /**
+             * Turns off the eraser and removes the cursor
+             */
+            this.turnEraserOff = () => {
+                this.$controls.$eraser.removeClass('eraser-on');
+                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
+                $(CONTAINER_SELECTOR).removeClass('can-erase');
+                this.isEraserOn = false;
+            }
 
             /**
              * Toggles the eraser mode
              * 
-             * @param {jQueryElement} $eraser 
-             * @param {Boolean} isEraserOn 
+             * @param {Boolean} isOn 
              */
-            this.toggleEraser = ($eraser, isEraserOn) => {
-                if (isEraserOn) {
-                    $eraser.addClass('eraser-on');
-                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
-                } else {
-                    $eraser.removeClass('eraser-on');
-                    $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click')
+            this.toggleEraser = () => {
+                // Only turn on eraser if there are highlights
+                if (this.hasHighlights) {
+                    this.isEraserOn ? this.turnEraserOff() : this.turnEraserOn()
                 }
-            };            
+            };
 
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
@@ -140,23 +185,21 @@ define([
             //hide highlighter menu by default
             this.hide();
 
-            const $eraser = $container.find('button.icon-eraser');
-            const $color = $container.find('.color-button');
-            let isEraserOn = false;
+            this.$controls = {
+                $eraser: $container.find('button.icon-eraser'),
+                $color: $container.find('.color-button')
+            }
 
-            $eraser.on('click', e => {
+            this.$controls.$eraser.on('click', e => {
                 e.preventDefault();
-                
-                isEraserOn = !isEraserOn;
-                this.toggleEraser($eraser, isEraserOn);
+                this.toggleEraser();
             });
 
-            $color.on('click', e => {
+            this.$controls.$color.on('click', e => {
                 e.preventDefault();
                 
-                if (isEraserOn) {
-                    isEraserOn = false;
-                    this.toggleEraser($eraser, isEraserOn);
+                if (this.isEraserOn) {
+                    this.toggleEraser();
                 }
                 
                 this.highlight(this.selection);
