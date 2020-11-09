@@ -5,7 +5,7 @@ $highlighterTrayHeight: 4.4rem;
     position: relative;
     width: $highlighterTrayWidth;
     min-height: $highlighterTrayHeight;
-    left: calc(100% - #{$highlighterTrayWidth});
+    left: calc(100% - #{$highlighterTrayWidth} - 1rem);
     z-index: 1;
 }
 
