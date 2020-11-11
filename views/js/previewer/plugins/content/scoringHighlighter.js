@@ -30,6 +30,12 @@ define([
 ], function ($, __, hider, pluginFactory, highlighterTrayTpl, highlighterFactory) {
     'use strict';
 
+    const colors = [
+        'ocher',
+        'blue',
+        'pink'
+    ]
+
     return pluginFactory({
         name: 'highlighter',
 
@@ -38,10 +44,14 @@ define([
          */
         init() {
             const testRunner = this.getTestRunner();
+
             this.selection = window.getSelection();
-            
+
             this.isEraserOn = false;
+            this.isHighlighterOn = false;
             this.hasHighlights = false;
+
+            this.currentColor = '';
 
             const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
@@ -54,7 +64,7 @@ define([
 
             this.eventListener = e => {
                 if (e.data.event === 'setIndex') {
-                    if(e.data.payload) {	                    
+                    if (e.data.payload) {
                         this.updateHasHighlights(e.data.payload);
                     }
 
@@ -66,10 +76,15 @@ define([
                     if (e.data.event === 'hide') {
                         this.hide();
                         this.turnEraserOff();
+                        this.turnHighlighterOff();
                     } else if (e.data.event === 'show') {
                         this.show();
                     }
                 }
+            };
+
+            this.selectEventListener = e => {
+                this.highlight(this.selection)
             };
 
             window.addEventListener('message', this.eventListener);
@@ -82,8 +97,8 @@ define([
 
             /**
              * Gets the ranges of the selection
-             * 
-             * @param {*} selection 
+             *
+             * @param {*} selection
              */
             function getAllRanges(selection) {
                 const allRanges = [];
@@ -94,13 +109,13 @@ define([
                 return allRanges;
             }
 
-            /**	
-             * Update highlgihting status
-             * 	
-             * @param {Object[]} highlightIndex - Highlight index	
-             */	
-            this.updateHasHighlights = (highlightIndex) => {	
-                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);	
+            /**
+             * Update highlighting status
+             *
+             * @param {Object[]} highlightIndex - Highlight index
+             */
+            this.updateHasHighlights = (highlightIndex) => {
+                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);
             }
 
             /**
@@ -109,33 +124,33 @@ define([
             const saveHighlights = () => {
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
-                this.updateHasHighlights(highlightIndex);                
+                this.updateHasHighlights(highlightIndex);
             }
 
             /**
              * Erases highlights and notifies the parent iframe
-             * 
+             *
              * @param {Event} e - Click event
              */
             const clearHighlightAndSave = (e) => {
                 highlighter.clearSingleHighlight(e);
                 saveHighlights()
 
-                if(!this.hasHighlights) {
+                if (!this.hasHighlights) {
                     this.turnEraserOff();
                 }
             }
 
             /**
              * Highlights the selection and notifies the parent iframe
-             * 
-             * @param {*} selection 
+             *
+             * @param {*} selection
              */
             this.highlight = (selection) => {
                 highlighter.highlightRanges(getAllRanges(selection));
 
                 selection.removeAllRanges();
-                saveHighlights()                
+                saveHighlights()
             };
 
             /**
@@ -146,6 +161,7 @@ define([
                 $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
                 $(CONTAINER_SELECTOR).addClass('can-erase');
                 this.isEraserOn = true;
+                this.turnHighlighterOff();
             }
 
             /**
@@ -160,13 +176,64 @@ define([
 
             /**
              * Toggles the eraser mode
-             * 
-             * @param {Boolean} isOn 
+             *
+             * @param {Boolean} isOn
              */
             this.toggleEraser = () => {
                 // Only turn on eraser if there are highlights
                 if (this.hasHighlights) {
                     this.isEraserOn ? this.turnEraserOff() : this.turnEraserOn()
+                }
+            };
+
+            /**
+             * Turns on the highlighter and adds the cursor
+             */
+            this.turnHighlighterOn = () => {
+                document.addEventListener('pointerup', this.selectEventListener);
+                $(CONTAINER_SELECTOR).addClass('can-highlight');
+                this.isHighlighterOn = true;
+                this.turnEraserOff();
+            }
+
+            /**
+             * Turns off the highlighter and removes the cursor
+             */
+            this.turnHighlighterOff = () => {
+                document.removeEventListener('pointerup', this.selectEventListener);
+
+                $(CONTAINER_SELECTOR).removeClass('can-highlight');
+                this.isHighlighterOn = false;
+
+                if (this.currentColor) {
+                    const $container = this.getAreaBroker().getArea('contentWrapper');
+                    $container.find(`[name='${this.currentColor}']`).parent().removeClass('color-selected');
+                }
+                this.currentColor = '';
+            }
+
+            /**
+             * Toggles the direct highlighting mode
+             *
+             * @param e
+             */
+            this.toggleHighlighter = e => {
+                const $container = this.getAreaBroker().getArea('contentWrapper');
+
+                if (this.currentColor) {
+                    $container.find(`[name='${this.currentColor}']`).parent().removeClass('color-selected');
+                }
+
+                const newColor = e.target.name;
+
+                if (this.currentColor === newColor) {
+                    this.turnHighlighterOff();
+                } else {
+                    this.turnHighlighterOn();
+                    this.turnEraserOff();
+
+                    $container.find(`[name='${newColor}']`).parent().addClass('color-selected');
+                    this.currentColor = newColor;
                 }
             };
 
@@ -197,11 +264,13 @@ define([
 
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
-                
+
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
-                
+
+                this.toggleHighlighter(e);
+
                 this.highlight(this.selection);
             });
         },

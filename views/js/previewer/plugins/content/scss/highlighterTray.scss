@@ -13,6 +13,10 @@ $highlighterTrayHeight: 4.4rem;
     cursor: url('../assets/icons/eraser-16.png'), auto;
 }
 
+.can-highlight {
+    cursor: url('../assets/icons/highlighter-16.png'), auto;
+}
+
 .highlighter-tray {
     $highlighterBackground: #1f1f1f;
     $ocherHighlightColor: #ffe957;
@@ -92,8 +96,9 @@ $highlighterTrayHeight: 4.4rem;
         min-width: $actionButtonSize;
         border: transparent;
         cursor: pointer;
+        z-index: 1;
 
-        &:hover {
+        &:hover, &:focus {
             border-radius: $actionButtonHoverSize;
             height: $actionButtonHoverSize;
             width: $actionButtonHoverSize;
@@ -104,15 +109,42 @@ $highlighterTrayHeight: 4.4rem;
         }
     }
 
-    & .ocher-color {
-        background-color: $ocherHighlightColor;
+    & .color-selected {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+            padding: 1.6rem;
+            border: 2px solid;
+            border-radius: 50%;
+        }
     }
 
-    & .pink-color {
-        background-color: $pinkHighlightColor;
+    & .ocher {
+        & input {
+            background-color: $ocherHighlightColor;
+        }
+        &:after {
+            border-color: $ocherHighlightColor;
+        }
     }
 
-    & .blue-color {
-        background-color: $blueHighlightColor;
+    & .pink {
+        & input {
+            background-color: $pinkHighlightColor;
+        }
+        &:after {
+            border-color: $pinkHighlightColor;
+        }
+    }
+
+    & .blue {
+        & input {
+            background-color: $blueHighlightColor;
+        }
+        &:after {
+            border-color: $blueHighlightColor;
+        }
     }
 }
