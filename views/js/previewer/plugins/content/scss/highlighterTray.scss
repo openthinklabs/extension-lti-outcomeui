@@ -1,11 +1,11 @@
 $highlighterTrayWidth: 30rem;
-$highlighterOffset: 30px;
+$highlighterTrayHeight: 4.4rem;
 
 .highlighter-container {
     position: relative;
     width: $highlighterTrayWidth;
-    left: calc(100% - #{$highlighterTrayWidth} - #{$highlighterOffset});
-    top: 15px;
+    min-height: $highlighterTrayHeight;
+    left: calc(100% - #{$highlighterTrayWidth} - 1rem);
     z-index: 1;
 }
 
@@ -19,14 +19,12 @@ $highlighterOffset: 30px;
     $pinkHighlightColor: #ffbdf5;
     $blueHighlightColor: #a3d7ff;
 
-    $highlighterTrayHeight: 4.4rem;
     $actionButtonSize: 1.6rem;
     $actionButtonHoverSize: 2.4rem;
 
+    position: fixed;
     border-radius: 8px;
     width: $highlighterTrayWidth;
-    height: 100%;
-    margin-right: $highlighterOffset;
     display: flex;
     align-items: center;
     justify-content: space-between;
