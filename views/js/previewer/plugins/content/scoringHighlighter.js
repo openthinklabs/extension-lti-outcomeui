@@ -30,12 +30,6 @@ define([
 ], function ($, __, hider, pluginFactory, highlighterTrayTpl, highlighterFactory) {
     'use strict';
 
-    const colors = [
-        'ocher',
-        'blue',
-        'pink'
-    ]
-
     return pluginFactory({
         name: 'highlighter',
 
@@ -190,8 +184,17 @@ define([
              * Turns on the highlighter and adds the cursor
              */
             this.turnHighlighterOn = () => {
-                document.addEventListener('pointerup', this.selectEventListener);
-                $(CONTAINER_SELECTOR).addClass('can-highlight');
+                const $container = $(CONTAINER_SELECTOR);
+
+                PointerEvent = (window.PointerEvent || window.MSPointerEvent);
+                if (PointerEvent) {
+                    $container.on('pointerup', this.selectEventListener);
+                } else {
+                    $container.on('touchend', this.selectEventListener);
+                    $container.on('mouseup', this.selectEventListener);
+                }
+
+                $container.addClass('can-highlight');
                 this.isHighlighterOn = true;
                 this.turnEraserOff();
             }
@@ -200,9 +203,17 @@ define([
              * Turns off the highlighter and removes the cursor
              */
             this.turnHighlighterOff = () => {
-                document.removeEventListener('pointerup', this.selectEventListener);
+                const $container = $(CONTAINER_SELECTOR);
 
-                $(CONTAINER_SELECTOR).removeClass('can-highlight');
+                PointerEvent = (window.PointerEvent || window.MSPointerEvent);
+                if (PointerEvent) {
+                    $container.off('pointerup');
+                } else {
+                    $container.off('touchend');
+                    $container.off('mouseup');
+                }
+
+                $container.removeClass('can-highlight');
                 this.isHighlighterOn = false;
 
                 if (this.currentColor) {
