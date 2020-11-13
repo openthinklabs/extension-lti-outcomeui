@@ -128,7 +128,7 @@ define([
              */
             const clearHighlightAndSave = (e) => {
                 highlighter.clearSingleHighlight(e);
-                saveHighlights()
+                saveHighlights();
 
                 if (!this.hasHighlights) {
                     this.turnEraserOff();
@@ -144,7 +144,7 @@ define([
                 highlighter.highlightRanges(getAllRanges(selection));
 
                 selection.removeAllRanges();
-                saveHighlights()
+                saveHighlights();
             };
 
             /**
