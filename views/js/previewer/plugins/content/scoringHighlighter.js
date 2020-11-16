@@ -186,13 +186,7 @@ define([
             this.turnHighlighterOn = () => {
                 const $container = $(CONTAINER_SELECTOR);
 
-                PointerEvent = (window.PointerEvent || window.MSPointerEvent);
-                if (PointerEvent) {
-                    $container.on('pointerup', this.selectEventListener);
-                } else {
-                    $container.on('touchend', this.selectEventListener);
-                    $container.on('mouseup', this.selectEventListener);
-                }
+                $container.on('pointerup', this.selectEventListener);
 
                 $container.addClass('can-highlight');
                 this.isHighlighterOn = true;
