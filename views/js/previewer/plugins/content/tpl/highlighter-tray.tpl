@@ -7,7 +7,7 @@
                     <input class="color-button {{this}}-color" data-color="{{this}}" type="button"/>
                 </div>
             {{/each}}
-            <button class="icon icon-eraser" />
+            <button class="icon icon-eraser"></button>
         </div>
     </div>
 </div>
