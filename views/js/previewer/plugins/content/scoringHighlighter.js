@@ -42,7 +42,6 @@ define([
             this.selection = window.getSelection();
 
             this.isEraserOn = false;
-            this.isHighlighterOn = false;
             this.hasHighlights = false;
 
             this.currentColor = '';
@@ -189,7 +188,6 @@ define([
                 $container.on('pointerup', this.selectEventListener);
 
                 $container.addClass('can-highlight');
-                this.isHighlighterOn = true;
                 this.turnEraserOff();
             }
 
@@ -208,7 +206,6 @@ define([
                 }
 
                 $container.removeClass('can-highlight');
-                this.isHighlighterOn = false;
 
                 if (this.currentColor) {
                     const $container = this.getAreaBroker().getArea('contentWrapper');
