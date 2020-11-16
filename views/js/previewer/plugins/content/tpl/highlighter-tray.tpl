@@ -2,15 +2,11 @@
     <div class="highlighter-tray">
         <span class="highlighter-title">{{label}}</span>
         <div class="items">
-            <div class="color-item">
-                <input class="color-button ocher-color" type="button"/>
-            </div>
-            <div class="color-item">
-                <input class="color-button blue-color" type="button"/>
-            </div>
-            <div class="color-item">
-                <input class="color-button pink-color" type="button"/>
-            </div>
+            {{#each colors}}
+                <div class="color-item">
+                    <input class="color-button {{this}}-color" data-color="{{this}}" type="button"/>
+                </div>
+            {{/each}}
             <button class="icon icon-eraser" />
         </div>
     </div>
