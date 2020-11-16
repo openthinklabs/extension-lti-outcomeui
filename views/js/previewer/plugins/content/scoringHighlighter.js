@@ -197,14 +197,7 @@ define([
             this.turnHighlighterOff = () => {
                 const $container = $(CONTAINER_SELECTOR);
 
-                PointerEvent = (window.PointerEvent || window.MSPointerEvent);
-                if (PointerEvent) {
-                    $container.off('pointerup');
-                } else {
-                    $container.off('touchend');
-                    $container.off('mouseup');
-                }
-
+                $container.off('pointerup');
                 $container.removeClass('can-highlight');
 
                 if (this.currentColor) {
