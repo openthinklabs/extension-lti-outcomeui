@@ -10,8 +10,21 @@ $highlighterOffset: 30px;
 }
 
 .can-erase {
-    cursor: url('../assets/icons/eraser-16.png'), auto;
+    cursor: url('../assets/icons/eraser-16.png') 5 5, auto;
 }
+
+.txt-user-highlight-ocher {
+    background-color: #ffe957;
+}
+
+.txt-user-highlight-pink {
+    background-color: #ffbdf5;
+}
+
+.txt-user-highlight-blue {
+    background-color: #a3d7ff;
+}
+
 
 .highlighter-tray {
     $highlighterBackground: #1f1f1f;
