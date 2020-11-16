@@ -46,10 +46,17 @@ define([
             const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
 
+            const colors = {
+                ocher: 'ocher',
+                blue: 'blue',
+                pink: 'pink',
+            }
+
             const highlighter = highlighterFactory({
                 className: CLASS_NAME,
                 containerSelector: CONTAINER_SELECTOR,
-                containersBlackList: []
+                containersBlackList: [],
+                colors
             });
 
             this.eventListener = e => {
@@ -76,7 +83,8 @@ define([
 
             this.$highlighterTray = $(
                 highlighterTrayTpl({
-                    label: __('highlighter')
+                    label: __('highlighter'),
+                    colors
                 })
             );
 
@@ -95,7 +103,7 @@ define([
             }
 
             /**	
-             * Update highlgihting status
+             * Update highlighting status
              * 	
              * @param {Object[]} highlightIndex - Highlight index	
              */	
@@ -170,6 +178,10 @@ define([
                 }
             };
 
+            this.setActiveColor = (color) => {
+                highlighter.setActiveColor(color);
+            }
+
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
             });
@@ -198,10 +210,13 @@ define([
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
                 
+                const activeColor = $(e.target).data('color');
+
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
                 
+                this.setActiveColor(activeColor);
                 this.highlight(this.selection);
             });
         },
