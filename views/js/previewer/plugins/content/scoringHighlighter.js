@@ -169,8 +169,6 @@ define([
 
             /**
              * Toggles the eraser mode
-             *
-             * @param {Boolean} isOn
              */
             this.toggleEraser = () => {
                 // Only turn on eraser if there are highlights
@@ -202,7 +200,7 @@ define([
 
                 if (this.currentColor) {
                     const $container = this.getAreaBroker().getArea('contentWrapper');
-                    $container.find(`[name='${this.currentColor}']`).parent().removeClass('color-selected');
+                    $container.find(`.${this.currentColor}`).removeClass('color-selected');
                 }
                 this.currentColor = '';
             }
@@ -216,7 +214,7 @@ define([
                 const $container = this.getAreaBroker().getArea('contentWrapper');
 
                 if (this.currentColor) {
-                    $container.find(`[name='${this.currentColor}']`).parent().removeClass('color-selected');
+                    $container.find(`.${this.currentColor}`).removeClass('color-selected');
                 }
 
                 const newColor = e.target.name;
@@ -227,7 +225,7 @@ define([
                     this.turnHighlighterOn();
                     this.turnEraserOff();
 
-                    $container.find(`[name='${newColor}']`).parent().addClass('color-selected');
+                    $container.find(`.${newColor}`).addClass('color-selected');
                     this.currentColor = newColor;
                 }
             };
