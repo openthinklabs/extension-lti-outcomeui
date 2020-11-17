@@ -62,14 +62,6 @@ $highlighterTrayHeight: 4.4rem;
         }
     }
 
-    & .color-item {
-        width: $highlighterTrayHeight;
-        height: $highlighterTrayHeight;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
     & .eraser-on {
         position: relative;
 
@@ -90,22 +82,29 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .color-button {
-        border-radius: $actionButtonSize;
-        height: $actionButtonSize;
-        width: $actionButtonSize;
-        min-width: $actionButtonSize;
         border: transparent;
-        cursor: pointer;
-        z-index: 1;
+        background: transparent;
+        padding: 0;
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
 
-        &:hover, &:focus {
-            border-radius: $actionButtonHoverSize;
-            height: $actionButtonHoverSize;
-            width: $actionButtonHoverSize;
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: $actionButtonSize;
+            height: $actionButtonSize;
+            width: $actionButtonSize;
+            min-width: $actionButtonSize;
         }
 
-        &:focus {
-            border: transparent !important;
+        &:hover, &:focus {
+            &:before {
+                border-radius: $actionButtonHoverSize;
+                height: $actionButtonHoverSize;
+                width: $actionButtonHoverSize;
+            }
         }
     }
 
@@ -114,7 +113,7 @@ $highlighterTrayHeight: 4.4rem;
             content: '';
             position: absolute;
             top: 50%;
-            transform: translate(0, -50%);
+            transform: translate(-50%, -50%);
             padding: 1.6rem;
             border: 2px solid;
             border-radius: 50%;
@@ -122,7 +121,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .ocher {
-        & input {
+        &:before {
             background-color: $ocherHighlightColor;
         }
         &:after {
@@ -131,7 +130,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .pink {
-        & input {
+        &:before {
             background-color: $pinkHighlightColor;
         }
         &:after {
@@ -140,7 +139,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .blue {
-        & input {
+        &:before {
             background-color: $blueHighlightColor;
         }
         &:after {
