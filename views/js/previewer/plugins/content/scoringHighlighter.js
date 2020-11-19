@@ -154,6 +154,11 @@ define([
                 saveHighlights();
             };
 
+            // TODO: add description
+            this.setActiveColor = (color) => {
+                highlighter.setActiveColor(color);
+            }
+
             /**
              * Turns on the eraser and adds the cursor
              */
@@ -266,10 +271,13 @@ define([
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
 
+                const activeColor = $(e.target).attr('name');
+                
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
 
+                this.setActiveColor(activeColor);
                 this.toggleHighlighter(e);
 
                 this.highlight(this.selection);
