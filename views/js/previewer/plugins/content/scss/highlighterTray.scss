@@ -1,16 +1,20 @@
 $highlighterTrayWidth: 30rem;
-$highlighterOffset: 30px;
+$highlighterTrayHeight: 4.4rem;
 
 .highlighter-container {
     position: relative;
     width: $highlighterTrayWidth;
-    left: calc(100% - #{$highlighterTrayWidth} - #{$highlighterOffset});
-    top: 15px;
+    min-height: $highlighterTrayHeight;
+    left: calc(100% - #{$highlighterTrayWidth} - 1rem);
     z-index: 1;
 }
 
 .can-erase {
     cursor: url('../assets/icons/eraser-16.png'), auto;
+}
+
+.can-highlight {
+    cursor: url('../assets/icons/highlighter-16.png'), auto;
 }
 
 .highlighter-tray {
@@ -19,14 +23,12 @@ $highlighterOffset: 30px;
     $pinkHighlightColor: #ffbdf5;
     $blueHighlightColor: #a3d7ff;
 
-    $highlighterTrayHeight: 4.4rem;
     $actionButtonSize: 1.6rem;
     $actionButtonHoverSize: 2.4rem;
 
+    position: fixed;
     border-radius: 8px;
     width: $highlighterTrayWidth;
-    height: 100%;
-    margin-right: $highlighterOffset;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,14 +62,6 @@ $highlighterOffset: 30px;
         }
     }
 
-    & .color-item {
-        width: $highlighterTrayHeight;
-        height: $highlighterTrayHeight;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
     & .eraser-on {
         position: relative;
 
@@ -88,33 +82,68 @@ $highlighterOffset: 30px;
     }
 
     & .color-button {
-        border-radius: $actionButtonSize;
-        height: $actionButtonSize;
-        width: $actionButtonSize;
-        min-width: $actionButtonSize;
         border: transparent;
-        cursor: pointer;
+        background: transparent;
+        padding: 0;
+        width: $highlighterTrayHeight;
+        height: $highlighterTrayHeight;
 
-        &:hover {
-            border-radius: $actionButtonHoverSize;
-            height: $actionButtonHoverSize;
-            width: $actionButtonHoverSize;
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: $actionButtonSize;
+            height: $actionButtonSize;
+            width: $actionButtonSize;
+            min-width: $actionButtonSize;
         }
 
-        &:focus {
-            border: transparent !important;
+        &:hover, &:focus {
+            &:before {
+                border-radius: $actionButtonHoverSize;
+                height: $actionButtonHoverSize;
+                width: $actionButtonHoverSize;
+            }
         }
     }
 
-    & .ocher-color {
-        background-color: $ocherHighlightColor;
+    & .color-selected {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1.6rem;
+            border: 2px solid;
+            border-radius: 50%;
+        }
     }
 
-    & .pink-color {
-        background-color: $pinkHighlightColor;
+    & .ocher {
+        &:before {
+            background-color: $ocherHighlightColor;
+        }
+        &:after {
+            border-color: $ocherHighlightColor;
+        }
     }
 
-    & .blue-color {
-        background-color: $blueHighlightColor;
+    & .pink {
+        &:before {
+            background-color: $pinkHighlightColor;
+        }
+        &:after {
+            border-color: $pinkHighlightColor;
+        }
+    }
+
+    & .blue {
+        &:before {
+            background-color: $blueHighlightColor;
+        }
+        &:after {
+            border-color: $blueHighlightColor;
+        }
     }
 }
