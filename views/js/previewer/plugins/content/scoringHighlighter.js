@@ -46,6 +46,10 @@ define([
 
             const CONTAINER_SELECTOR = '.qti-itemBody';
 
+            /**
+             * @typedef Colors
+             * @type {Object}
+             */
             const colors = {
                 ocher: 'txt-user-highlight-ocher',
                 pink: 'txt-user-highlight-pink',
@@ -80,7 +84,10 @@ define([
                 }
             };
 
-            this.selectEventListener = e => {
+            /**
+             * Highlights the range of text selected by the user 
+             */
+            this.selectEventListener = () => {
                 this.highlight(this.selection);
             };
 
@@ -96,7 +103,7 @@ define([
             /**
              * Gets the ranges of the selection
              *
-             * @param {*} selection
+             * @param {Selection} selection
              */
             function getAllRanges(selection) {
                 const allRanges = [];
@@ -121,6 +128,7 @@ define([
              */
             const saveHighlights = () => {
                 const highlightIndex = highlighter.getHighlightIndex();
+
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
                 this.updateHasHighlights(highlightIndex);
             };
@@ -151,11 +159,18 @@ define([
                 saveHighlights();
             };
 
-            // TODO: add description
+            /**
+             * Notify highlighter plugin which color is active 
+             * @param {@memberof Colors} color 
+             */
             this.setActiveColor = color => {
                 highlighter.setActiveColor(color);
             };
 
+            /**
+             * Returns selector for all highlighter wrapper elements
+             * @returns {string}
+             */
             const getHighlightsClasses = () => {
                 return Object.values(colors)
                     .map(color => `${CONTAINER_SELECTOR} .${color}`)
@@ -201,7 +216,7 @@ define([
 
                 $container.on('pointerup', this.selectEventListener);
                 $container.addClass('can-highlight');
-                
+
                 this.turnEraserOff();
             };
 
