@@ -117,10 +117,10 @@ define([
             /**
              * Update highlighting status
              *
-             * @param {Object[]} highlightIndex - Highlight index
+             * @param {Object} highlightIndex - Highlight index
              */
             this.updateHasHighlights = highlightIndex => {
-                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);
+                this.hasHighlights = Object.values(highlightIndex).some(highlight => highlight.highlighted === true);
             };
 
             /**
