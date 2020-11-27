@@ -2,9 +2,11 @@
     <div class="highlighter-tray">
         <span class="highlighter-title">{{label}}</span>
         <div class="items">
-            <button name="ocher" class="color-button ocher"></button>
-            <button name="blue" class="color-button blue"></button>
-            <button name="pink" class="color-button pink"></button>
+            {{#each colors}}
+                <div class="color-item">
+                    <button class="color-button {{@key}}" name="{{@key}}"></button>
+                </div>
+            {{/each}}
             <button class="icon icon-eraser"></button>
         </div>
     </div>
