@@ -40,19 +40,27 @@ define([
             const testRunner = this.getTestRunner();
 
             this.selection = window.getSelection();
-
             this.isEraserOn = false;
             this.hasHighlights = false;
-
             this.currentColor = '';
 
-            const CLASS_NAME =  'txt-user-highlight';
             const CONTAINER_SELECTOR = '.qti-itemBody';
 
+            /**
+             * @typedef Colors
+             * @type {Object}
+             */
+            const colors = {
+                ocher: 'txt-user-highlight-ocher',
+                pink: 'txt-user-highlight-pink',
+                blue: 'txt-user-highlight-blue'
+            };
+
             const highlighter = highlighterFactory({
-                className: CLASS_NAME,
+                className: colors.ocher,
                 containerSelector: CONTAINER_SELECTOR,
-                containersBlackList: []
+                containersBlackList: [],
+                colors: colors
             });
 
             this.eventListener = e => {
@@ -76,22 +84,26 @@ define([
                 }
             };
 
-            this.selectEventListener = e => {
-                this.highlight(this.selection)
+            /**
+             * Highlights the range of text selected by the user 
+             */
+            this.selectEventListener = () => {
+                this.highlight(this.selection);
             };
 
             window.addEventListener('message', this.eventListener);
 
             this.$highlighterTray = $(
                 highlighterTrayTpl({
-                    label: __('highlighter')
+                    label: __('highlighter'),
+                    colors
                 })
             );
 
             /**
              * Gets the ranges of the selection
              *
-             * @param {*} selection
+             * @param {Selection} selection
              */
             function getAllRanges(selection) {
                 const allRanges = [];
@@ -105,41 +117,42 @@ define([
             /**
              * Update highlighting status
              *
-             * @param {Object[]} highlightIndex - Highlight index
+             * @param {Object} highlightIndex - Highlight index
              */
-            this.updateHasHighlights = (highlightIndex) => {
-                this.hasHighlights = highlightIndex.some(highlight => highlight.highlighted === true);
-            }
+            this.updateHasHighlights = highlightIndex => {
+                this.hasHighlights = Object.values(highlightIndex).some(highlight => highlight.highlighted === true);
+            };
 
             /**
              * Sends the highlighIndex to parent and updates hasHighlights
              */
             const saveHighlights = () => {
                 const highlightIndex = highlighter.getHighlightIndex();
+
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
                 this.updateHasHighlights(highlightIndex);
-            }
+            };
 
             /**
              * Erases highlights and notifies the parent iframe
              *
              * @param {Event} e - Click event
              */
-            const clearHighlightAndSave = (e) => {
+            const clearHighlightAndSave = e => {
                 highlighter.clearSingleHighlight(e);
                 saveHighlights();
 
                 if (!this.hasHighlights) {
                     this.turnEraserOff();
                 }
-            }
+            };
 
             /**
              * Highlights the selection and notifies the parent iframe
              *
              * @param {*} selection
              */
-            this.highlight = (selection) => {
+            this.highlight = selection => {
                 highlighter.highlightRanges(getAllRanges(selection));
 
                 selection.removeAllRanges();
@@ -147,25 +160,43 @@ define([
             };
 
             /**
+             * Notify highlighter plugin which color is active 
+             * @param {@memberof Colors} color 
+             */
+            this.setActiveColor = color => {
+                highlighter.setActiveColor(color);
+            };
+
+            /**
+             * Returns selector for all highlighter wrapper elements
+             * @returns {string}
+             */
+            const getHighlightsClasses = () => {
+                return Object.values(colors)
+                    .map(color => `${CONTAINER_SELECTOR} .${color}`)
+                    .join(',');
+            };
+
+            /**
              * Turns on the eraser and adds the cursor
              */
             this.turnEraserOn = () => {
                 this.$controls.$eraser.addClass('eraser-on');
-                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click').on('click', clearHighlightAndSave);
+                $(getHighlightsClasses()).off('click').on('click', clearHighlightAndSave);
                 $(CONTAINER_SELECTOR).addClass('can-erase');
                 this.isEraserOn = true;
                 this.turnHighlighterOff();
-            }
+            };
 
             /**
              * Turns off the eraser and removes the cursor
              */
             this.turnEraserOff = () => {
                 this.$controls.$eraser.removeClass('eraser-on');
-                $(CONTAINER_SELECTOR + ' .' + CLASS_NAME).off('click');
+                $(getHighlightsClasses()).off('click');
                 $(CONTAINER_SELECTOR).removeClass('can-erase');
                 this.isEraserOn = false;
-            }
+            };
 
             /**
              * Toggles the eraser mode
@@ -173,7 +204,7 @@ define([
             this.toggleEraser = () => {
                 // Only turn on eraser if there are highlights
                 if (this.hasHighlights) {
-                    this.isEraserOn ? this.turnEraserOff() : this.turnEraserOn()
+                    this.isEraserOn ? this.turnEraserOff() : this.turnEraserOn();
                 }
             };
 
@@ -184,10 +215,10 @@ define([
                 const $container = $(CONTAINER_SELECTOR);
 
                 $container.on('pointerup', this.selectEventListener);
-
                 $container.addClass('can-highlight');
+
                 this.turnEraserOff();
-            }
+            };
 
             /**
              * Turns off the highlighter and removes the cursor
@@ -203,12 +234,12 @@ define([
                     $container.find(`.${this.currentColor}`).removeClass('color-selected');
                 }
                 this.currentColor = '';
-            }
+            };
 
             /**
              * Toggles the direct highlighting mode
              *
-             * @param e
+             * @param {MouseEvent} e
              */
             this.toggleHighlighter = e => {
                 const $container = this.getAreaBroker().getArea('contentWrapper');
@@ -248,7 +279,7 @@ define([
             this.$controls = {
                 $eraser: $container.find('button.icon-eraser'),
                 $color: $container.find('.color-button')
-            }
+            };
 
             this.$controls.$eraser.on('click', e => {
                 e.preventDefault();
@@ -258,10 +289,13 @@ define([
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
 
+                const activeColor = $(e.target).attr('name');
+
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
 
+                this.setActiveColor(activeColor);
                 this.toggleHighlighter(e);
 
                 this.highlight(this.selection);
