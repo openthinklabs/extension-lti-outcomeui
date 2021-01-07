@@ -115,9 +115,27 @@ define([
             }
 
             /**
+             * 
+             * @typedef {Object} inlineRanges
+             * @property {string|number} [c] Highlighter wrapper class name
+             * @property {string|number} [groupId] Highlighter wrapper groupId attribute
+             * @property {number} startOffset
+             * @property {number} endOffset
+             */
+
+            /**
+             * Provide the range of content with a data to highlight DOM elements
+             * @typedef {Object} highlightIndex
+             * @property {boolean} highlighted Given range has highlights
+             * @property {string|number} [c] Highlighter wrapper class name
+             * @property {string|number} [groupId] Highlighter wrapper groupId attribute
+             * @property {inlineRanges[]} [inlineRanges] The given range has more than one DOM element to highlight
+             */
+
+            /**
              * Update highlighting status
              *
-             * @param {Object} highlightIndex - Highlight index
+             * @param {highlightIndex} highlightIndex - Highlight index
              */
             this.updateHasHighlights = highlightIndex => {
                 this.hasHighlights = Object.values(highlightIndex).some(highlight => highlight.highlighted === true);
@@ -128,9 +146,9 @@ define([
              */
             const saveHighlights = () => {
                 const highlightIndex = highlighter.getHighlightIndex();
-
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
                 this.updateHasHighlights(highlightIndex);
+                this.updateHighlightsCounter(highlightIndex);
             };
 
             /**
@@ -176,6 +194,39 @@ define([
                     .map(color => `${CONTAINER_SELECTOR} .${color}`)
                     .join(',');
             };
+
+            /**
+             * Color counter updater
+             * @param {highlightIndex[]} highlightIndex
+             */
+            this.updateHighlightsCounter = (highlightIndex) => {
+                const colorCounter = Object.keys(colors).reduce((state, color)=>{
+                    state[color] = 0;
+                    return state
+                }, {});
+
+                highlightIndex.forEach((item) => {
+                     if (item.highlighted) {
+                       const hasInlineRanges = Array.isArray(item.inlineRanges);
+                   
+                       if (hasInlineRanges) {
+                           item.inlineRanges.forEach((inlineItem) => {
+                               const colorId = inlineItem.c;
+
+                               if (colorCounter.hasOwnProperty(colorId)){
+                                colorCounter[colorId] += 1;
+                               }
+                           })
+                       } else {
+                        const colorId = item.c;
+
+                           if (colorId && colorCounter.hasOwnProperty(colorId)){
+                            colorCounter[colorId] += 1;
+                           }
+                       }
+                     }
+                });
+            }
 
             /**
              * Turns on the eraser and adds the cursor
