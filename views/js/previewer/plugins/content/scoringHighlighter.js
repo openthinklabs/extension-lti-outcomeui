@@ -85,7 +85,7 @@ define([
             };
 
             /**
-             * Highlights the range of text selected by the user 
+             * Highlights the range of text selected by the user
              */
             this.selectEventListener = () => {
                 this.highlight(this.selection);
@@ -115,7 +115,7 @@ define([
             }
 
             /**
-             * 
+             *
              * @typedef {Object} inlineRanges
              * @property {string|number} [c] Highlighter wrapper class name
              * @property {string|number} [groupId] Highlighter wrapper groupId attribute
@@ -178,8 +178,8 @@ define([
             };
 
             /**
-             * Notify highlighter plugin which color is active 
-             * @param {@memberof Colors} color 
+             * Notify highlighter plugin which color is active
+             * @param {@memberof Colors} color
              */
             this.setActiveColor = color => {
                 highlighter.setActiveColor(color);
@@ -199,34 +199,43 @@ define([
              * Color counter updater
              * @param {highlightIndex[]} highlightIndex
              */
-            this.updateHighlightsCounter = (highlightIndex) => {
-                const colorCounter = Object.keys(colors).reduce((state, color)=>{
+            this.updateHighlightsCounter = highlightIndex => {
+                const colorCounter = Object.keys(colors).reduce((state, color) => {
                     state[color] = 0;
-                    return state
+                    return state;
                 }, {});
 
-                highlightIndex.forEach((item) => {
-                     if (item.highlighted) {
-                       const hasInlineRanges = Array.isArray(item.inlineRanges);
-                   
-                       if (hasInlineRanges) {
-                           item.inlineRanges.forEach((inlineItem) => {
-                               const colorId = inlineItem.c;
+                highlightIndex.forEach(item => {
+                    if (item.highlighted) {
+                        const hasInlineRanges = Array.isArray(item.inlineRanges);
 
-                               if (colorCounter.hasOwnProperty(colorId)){
+                        if (hasInlineRanges) {
+                            item.inlineRanges.forEach(inlineItem => {
+                                const colorId = inlineItem.c;
+
+                                if (colorCounter.hasOwnProperty(colorId)) {
+                                    colorCounter[colorId] += 1;
+                                }
+                            });
+                        } else {
+                            const colorId = item.c;
+
+                            if (colorCounter.hasOwnProperty(colorId)) {
                                 colorCounter[colorId] += 1;
-                               }
-                           })
-                       } else {
-                        const colorId = item.c;
-
-                           if (colorId && colorCounter.hasOwnProperty(colorId)){
-                            colorCounter[colorId] += 1;
-                           }
-                       }
-                     }
+                            }
+                        }
+                    }
                 });
-            }
+
+                Object.keys(colorCounter).forEach(colorName => {
+                    if (this.$highlighterTray) {
+                        const count = colorCounter[colorName];
+                        const $colorCounter = $(`button.${colorName} .counter`, this.$highlighterTray);
+
+                        $colorCounter.text(count);
+                    }
+                });
+            };
 
             /**
              * Turns on the eraser and adds the cursor
@@ -290,16 +299,14 @@ define([
             /**
              * Toggles the direct highlighting mode
              *
-             * @param {MouseEvent} e
+             * @param {string} newColor
              */
-            this.toggleHighlighter = e => {
+            this.toggleHighlighter = newColor => {
                 const $container = this.getAreaBroker().getArea('contentWrapper');
 
                 if (this.currentColor) {
                     $container.find(`.${this.currentColor}`).removeClass('color-selected');
                 }
-
-                const newColor = e.target.name;
 
                 if (this.currentColor === newColor) {
                     this.turnHighlighterOff();
@@ -340,14 +347,14 @@ define([
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
 
-                const activeColor = $(e.target).attr('name');
+                const activeColor = $(e.currentTarget).attr('name');
 
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
 
                 this.setActiveColor(activeColor);
-                this.toggleHighlighter(e);
+                this.toggleHighlighter(activeColor);
 
                 this.highlight(this.selection);
             });
