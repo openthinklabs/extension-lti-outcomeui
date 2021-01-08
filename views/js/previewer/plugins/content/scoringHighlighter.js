@@ -330,7 +330,7 @@ define([
         render() {
             const $container = this.getAreaBroker().getArea('contentWrapper');
             $container.append(this.$highlighterTray);
-            
+
             //hide highlighter menu by default
             this.hide();
 
