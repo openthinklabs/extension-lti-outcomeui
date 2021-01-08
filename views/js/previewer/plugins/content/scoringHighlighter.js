@@ -139,6 +139,7 @@ define([
              */
             this.updateHasHighlights = highlightIndex => {
                 this.hasHighlights = Object.values(highlightIndex).some(highlight => highlight.highlighted === true);
+                this.updateHighlightsCounter(highlightIndex);
             };
 
             /**
@@ -148,7 +149,6 @@ define([
                 const highlightIndex = highlighter.getHighlightIndex();
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
                 this.updateHasHighlights(highlightIndex);
-                this.updateHighlightsCounter(highlightIndex);
             };
 
             /**
@@ -330,7 +330,7 @@ define([
         render() {
             const $container = this.getAreaBroker().getArea('contentWrapper');
             $container.append(this.$highlighterTray);
-
+            
             //hide highlighter menu by default
             this.hide();
 
