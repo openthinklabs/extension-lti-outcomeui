@@ -126,7 +126,7 @@ define([
             /**
              * Provide the range of content with a data to highlight DOM elements
              * @typedef {Object} highlightIndex
-             * @property {boolean} highlighted Given range has highlights
+             * @property {boolean} [highlighted] Specifies if given range has highlights
              * @property {string|number} [c] Highlighter wrapper class name
              * @property {string|number} [groupId] Highlighter wrapper groupId attribute
              * @property {inlineRanges[]} [inlineRanges] The given range has more than one DOM element to highlight
