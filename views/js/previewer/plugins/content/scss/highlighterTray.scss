@@ -100,20 +100,24 @@ $highlighterTrayHeight: 4.4rem;
         width: $highlighterTrayHeight;
         height: $highlighterTrayHeight;
 
-        &:before {
-            content: '';
+        .counter {
+            color: $highlighterBackground;
+            font-size: 1rem;
+            text-shadow: none;
             position: absolute;
             top: 50%;
             transform: translate(-50%, -50%);
             border-radius: $actionButtonSize;
+            line-height: $actionButtonSize;
             height: $actionButtonSize;
             width: $actionButtonSize;
             min-width: $actionButtonSize;
         }
 
         &:hover, &:focus {
-            &:before {
+            .counter {
                 border-radius: $actionButtonHoverSize;
+                line-height: $actionButtonHoverSize;
                 height: $actionButtonHoverSize;
                 width: $actionButtonHoverSize;
             }
@@ -133,7 +137,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .ocher {
-        &:before {
+        .counter {
             background-color: $ocherHighlightColor;
         }
         &:after {
@@ -142,7 +146,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .pink {
-        &:before {
+        .counter {
             background-color: $pinkHighlightColor;
         }
         &:after {
@@ -151,7 +155,7 @@ $highlighterTrayHeight: 4.4rem;
     }
 
     & .blue {
-        &:before {
+        .counter {
             background-color: $blueHighlightColor;
         }
         &:after {
