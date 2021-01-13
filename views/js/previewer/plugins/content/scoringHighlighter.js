@@ -39,7 +39,6 @@ define([
         init() {
             const testRunner = this.getTestRunner();
 
-            this.selection = window.getSelection();
             this.isEraserOn = false;
             this.hasHighlights = false;
             this.currentColor = '';
@@ -88,7 +87,7 @@ define([
              * Highlights the range of text selected by the user 
              */
             this.selectEventListener = () => {
-                this.highlight(this.selection);
+                this.highlight();
             };
 
             window.addEventListener('message', this.eventListener);
@@ -108,9 +107,9 @@ define([
             function getAllRanges(selection) {
                 const allRanges = [];
 
-                for (let i = 0; i < selection.rangeCount; i++) {
-                    allRanges.push(selection.getRangeAt(i));
-                }
+                    for (let i = 0; i < selection.rangeCount; i++) {
+                        allRanges.push(selection.getRangeAt(i));
+                    }
                 return allRanges;
             }
 
@@ -149,10 +148,14 @@ define([
 
             /**
              * Highlights the selection and notifies the parent iframe
-             *
-             * @param {*} selection
              */
-            this.highlight = selection => {
+            this.highlight = () => {
+                const selection = window.getSelection();
+
+                if (selection === null) {
+                    return;
+                }
+
                 highlighter.highlightRanges(getAllRanges(selection));
 
                 selection.removeAllRanges();
@@ -296,9 +299,8 @@ define([
                 }
 
                 this.setActiveColor(activeColor);
-                this.toggleHighlighter(e);
-
-                this.highlight(this.selection);
+                this.toggleHighlighter(activeColor);
+                this.highlight();
             });
         },
 
