@@ -107,9 +107,9 @@ define([
             function getAllRanges(selection) {
                 const allRanges = [];
 
-                    for (let i = 0; i < selection.rangeCount; i++) {
-                        allRanges.push(selection.getRangeAt(i));
-                    }
+                for (let i = 0; i < selection.rangeCount; i++) {
+                    allRanges.push(selection.getRangeAt(i));
+                }
                 return allRanges;
             }
 
@@ -235,7 +235,7 @@ define([
                         const count = colorCounter[colorName];
                         const $colorCounter = $(`button.${colorName} .counter`, this.$highlighterTray);
 
-                        $colorCounter.text(count);
+                        $colorCounter.text(count > 99 ? 99 : count);
                     }
                 });
             };
