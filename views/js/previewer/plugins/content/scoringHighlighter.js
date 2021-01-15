@@ -39,7 +39,6 @@ define([
         init() {
             const testRunner = this.getTestRunner();
 
-            this.selection = window.getSelection();
             this.isEraserOn = false;
             this.hasHighlights = false;
             this.currentColor = '';
@@ -85,10 +84,10 @@ define([
             };
 
             /**
-             * Highlights the range of text selected by the user 
+             * Highlights the range of text selected by the user
              */
             this.selectEventListener = () => {
-                this.highlight(this.selection);
+                this.highlight();
             };
 
             window.addEventListener('message', this.eventListener);
@@ -115,12 +114,31 @@ define([
             }
 
             /**
+             *
+             * @typedef {Object} inlineRanges
+             * @property {string|number} [c] Highlighter wrapper class name
+             * @property {string|number} [groupId] Highlighter wrapper groupId attribute
+             * @property {number} startOffset
+             * @property {number} endOffset
+             */
+
+            /**
+             * Provide the range of content with a data to highlight DOM elements
+             * @typedef {Object} highlightIndex
+             * @property {boolean} [highlighted] Specifies if given range has highlights
+             * @property {string|number} [c] Highlighter wrapper class name
+             * @property {string|number} [groupId] Highlighter wrapper groupId attribute
+             * @property {inlineRanges[]} [inlineRanges] The given range has more than one DOM element to highlight
+             */
+
+            /**
              * Update highlighting status
              *
-             * @param {Object} highlightIndex - Highlight index
+             * @param {highlightIndex} highlightIndex - Highlight index
              */
             this.updateHasHighlights = highlightIndex => {
                 this.hasHighlights = Object.values(highlightIndex).some(highlight => highlight.highlighted === true);
+                this.updateHighlightsCounter(highlightIndex);
             };
 
             /**
@@ -128,7 +146,6 @@ define([
              */
             const saveHighlights = () => {
                 const highlightIndex = highlighter.getHighlightIndex();
-
                 window.parent.postMessage({ event: 'indexUpdated', payload: highlightIndex }, '*');
                 this.updateHasHighlights(highlightIndex);
             };
@@ -149,10 +166,14 @@ define([
 
             /**
              * Highlights the selection and notifies the parent iframe
-             *
-             * @param {*} selection
              */
-            this.highlight = selection => {
+            this.highlight = () => {
+                const selection = window.getSelection();
+
+                if (selection === null) {
+                    return;
+                }
+
                 highlighter.highlightRanges(getAllRanges(selection));
 
                 selection.removeAllRanges();
@@ -160,8 +181,8 @@ define([
             };
 
             /**
-             * Notify highlighter plugin which color is active 
-             * @param {@memberof Colors} color 
+             * Notify highlighter plugin which color is active
+             * @param {@memberof Colors} color
              */
             this.setActiveColor = color => {
                 highlighter.setActiveColor(color);
@@ -175,6 +196,48 @@ define([
                 return Object.values(colors)
                     .map(color => `${CONTAINER_SELECTOR} .${color}`)
                     .join(',');
+            };
+
+            /**
+             * Color counter updater
+             * @param {highlightIndex[]} highlightIndex
+             */
+            this.updateHighlightsCounter = highlightIndex => {
+                const colorCounter = Object.keys(colors).reduce((state, color) => {
+                    state[color] = 0;
+                    return state;
+                }, {});
+
+                highlightIndex.forEach(item => {
+                    if (item.highlighted) {
+                        const hasInlineRanges = Array.isArray(item.inlineRanges);
+
+                        if (hasInlineRanges) {
+                            item.inlineRanges.forEach(inlineItem => {
+                                const colorId = inlineItem.c;
+
+                                if (colorCounter.hasOwnProperty(colorId)) {
+                                    colorCounter[colorId] += 1;
+                                }
+                            });
+                        } else {
+                            const colorId = item.c;
+
+                            if (colorCounter.hasOwnProperty(colorId)) {
+                                colorCounter[colorId] += 1;
+                            }
+                        }
+                    }
+                });
+
+                Object.keys(colorCounter).forEach(colorName => {
+                    if (this.$highlighterTray) {
+                        const count = colorCounter[colorName];
+                        const $colorCounter = $(`button.${colorName} .counter`, this.$highlighterTray);
+
+                        $colorCounter.text(count > 99 ? 99 : count);
+                    }
+                });
             };
 
             /**
@@ -239,16 +302,14 @@ define([
             /**
              * Toggles the direct highlighting mode
              *
-             * @param {MouseEvent} e
+             * @param {string} newColor
              */
-            this.toggleHighlighter = e => {
+            this.toggleHighlighter = newColor => {
                 const $container = this.getAreaBroker().getArea('contentWrapper');
 
                 if (this.currentColor) {
                     $container.find(`.${this.currentColor}`).removeClass('color-selected');
                 }
-
-                const newColor = e.target.name;
 
                 if (this.currentColor === newColor) {
                     this.turnHighlighterOff();
@@ -289,16 +350,15 @@ define([
             this.$controls.$color.on('click', e => {
                 e.preventDefault();
 
-                const activeColor = $(e.target).attr('name');
+                const activeColor = $(e.currentTarget).attr('name');
 
                 if (this.isEraserOn) {
                     this.toggleEraser();
                 }
 
                 this.setActiveColor(activeColor);
-                this.toggleHighlighter(e);
-
-                this.highlight(this.selection);
+                this.toggleHighlighter(activeColor);
+                this.highlight();
             });
         },
 
