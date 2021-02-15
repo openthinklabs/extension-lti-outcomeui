@@ -33,7 +33,8 @@ define(['taoItems/previewer/factory'], function(previewerFactory) {
                 view: 'scorer',
                 fullPage: true,
                 hideActionBars: true,
-                plugins
+                plugins,
+                disableDefaultPlugins: false
             });
         }
     };
