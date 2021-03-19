@@ -26,7 +26,8 @@ define([
     'taoTests/runner/plugin',
     'tpl!ltiOutcomeUi/previewer/plugins/content/tpl/highlighter-tray',
     'ui/highlighter',
-    'css!ltiOutcomeUi/previewer/plugins/content/css/highlighterTray.css'
+    'css!ltiOutcomeUi/previewer/plugins/content/css/highlighterTray.css',
+    'css!ltiOutcomeUi/previewer/plugins/content/css/mathEntryOverrides.css'
 ], function ($, __, hider, pluginFactory, highlighterTrayTpl, highlighterFactory) {
     'use strict';
 
