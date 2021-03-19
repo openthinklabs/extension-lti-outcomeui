@@ -1,0 +1,11 @@
+/** This CSS file is suppose to override the math entry interaction in review mode.
+    These changes should be moved to qtiItemPci, specifically to MathEntryInteraction's runtime
+**/
+
+.item-previewer-scope {
+    /** This will display the truncated item responses in review mode **/
+    .mq-root-block {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+}
