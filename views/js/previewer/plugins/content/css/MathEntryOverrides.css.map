@@ -1,9 +1,9 @@
 {
 	"version": 3,
-	"file": "MathEntryOverrides.css",
+	"file": "mathEntryOverrides.css",
 	"sources": [
-		"../scss/MathEntryOverrides.scss"
+		"../scss/mathEntryOverrides.scss"
 	],
 	"names": [],
-	"mappings": "AAIA,AAEI,qBAFiB,CAEjB,cAAc,AAAC,CACX,OAAO,CAAE,eAAe,CACxB,SAAS,CAAE,eAAe,CAC7B"
+	"mappings": "AAIA,AAEI,qBAFiB,CAEjB,iBAAiB,AAAC,CACd,KAAK,CAAE,sBAAsB,CAChC"
 }
