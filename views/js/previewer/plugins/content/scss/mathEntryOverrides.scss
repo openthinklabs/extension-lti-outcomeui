@@ -4,8 +4,7 @@
 
 .item-previewer-scope {
     /** This will display the truncated item responses in review mode **/
-    .mq-root-block {
-        display: flex !important;
-        flex-wrap: wrap !important;
+    .math-entry-input {
+        width: max-content !important;
     }
 }
