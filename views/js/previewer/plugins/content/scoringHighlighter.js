@@ -278,7 +278,7 @@ define([
             this.turnHighlighterOn = () => {
                 const $container = $(CONTAINER_SELECTOR);
 
-                $container.on('pointerup', this.selectEventListener);
+                $container.off('pointerup', this.selectEventListener).on('pointerup', this.selectEventListener);
                 $container.addClass('can-highlight');
 
                 this.turnEraserOff();
@@ -290,7 +290,7 @@ define([
             this.turnHighlighterOff = () => {
                 const $container = $(CONTAINER_SELECTOR);
 
-                $container.off('pointerup');
+                $container.off('pointerup', this.selectEventListener);
                 $container.removeClass('can-highlight');
 
                 if (this.currentColor) {
@@ -384,6 +384,7 @@ define([
          */
         destroy() {
             this.$highlighterTray.remove();
+            $container.off('pointerup', this.selectEventListener);
             window.removeEventListener('message', this.eventListener);
         }
     });
