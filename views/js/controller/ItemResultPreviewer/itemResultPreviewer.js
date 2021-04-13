@@ -48,7 +48,7 @@ define(['module', 'util/url', 'core/logger', 'core/request', 'taoItems/previewer
      * @returns {Promise}
      */
     function refineFileResponse(response, deliveryUri) {
-        const { file } = (response && response.base) || {};
+        const file = response && response.base && response.base.file;
         if (file && file.uri && !file.data) {
             return requestFileContent(file.uri, deliveryUri)
                 .then(fileData => {
