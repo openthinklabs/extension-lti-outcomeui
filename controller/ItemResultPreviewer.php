@@ -29,7 +29,10 @@ use oat\taoOutcomeUi\model\ResultsService;
 use oat\taoOutcomeUi\model\ResultsViewerService;
 use oat\taoQtiTestPreviewer\models\ItemPreviewer;
 use oat\taoQtiTestPreviewer\models\PreviewLanguageService;
+use oat\taoOutcomeUi\model\Wrapper\ResultServiceWrapper;
+use oat\taoResultServer\models\classes\ResultServerService;
 use \core_kernel_classes_Resource;
+use \tao_helpers_Uri;
 use oat\taoLti\models\classes\LtiMessages\LtiErrorMessage;
 
 /**
@@ -126,6 +129,14 @@ class ItemResultPreviewer extends ToolModule
     }
 
     /**
+     * @return ResultsService
+     */
+    protected function getResultsService()
+    {
+        return $this->getServiceLocator()->get(ResultServiceWrapper::SERVICE_ID)->getService();
+    }
+
+    /**
      * Get item variable e.g. state of item at last view by test taker
      *
      * @param core_kernel_classes_Resource $delivery
@@ -145,6 +156,59 @@ class ItemResultPreviewer extends ToolModule
         }
 
         return null;
+    }
+
+    /**
+     * Returns the currently configured result storage
+     *
+     * @param \core_kernel_classes_Resource $delivery
+     * @return \taoResultServer_models_classes_ReadableResultStorage
+     */
+    protected function getResultStorage($delivery)
+    {
+        /** @var ResultServerService $resultServerService */
+        $resultServerService = $this->getServiceManager()->get(ResultServerService::SERVICE_ID);
+        $resultStorage = $resultServerService->getResultStorage($delivery->getUri());
+        if ($resultStorage instanceof NoResultStorage) {
+            throw NoResultStorageException::create();
+        }
+
+        if (!$resultStorage instanceof \taoResultServer_models_classes_ReadableResultStorage) {
+            throw new \common_exception_Error('The results storage it is not readable');
+        }
+        $this->getResultsService()->setImplementation($resultStorage);
+        return $resultStorage;
+    }
+
+    /**
+     * Get the data for the file in the response as a variable data
+     */
+    public function getVariableFile()
+    {
+        $delivery = $this->getResource(tao_helpers_Uri::decode($this->getRequestParameter('deliveryUri')));
+        $variableUri = $this->getResource(tao_helpers_Uri::decode($this->getRequestParameter('variableUri')));
+        try {
+            $this->getResultStorage($delivery);
+
+            $file = $this->getResultsService()->getVariableFile($variableUri);
+
+            // weirdly, the mime type declaration can be expressed as a HTTP header notation
+            $mime = trim(str_replace('content-type:', '', strtolower($file["mimetype"])));
+
+            $this->returnJson(
+                [
+                    'success' => true,
+                    'data' => base64_encode($file["data"]),
+                    'name' => $file["filename"],
+                    'mime' => $mime,
+                ]
+            );
+        } catch (\common_exception_Error $e) {
+            $this->returnJson(
+                $this->getErrorResponse($e),
+                $this->getStatusCode($e)
+            );
+        }
     }
 
     /**
