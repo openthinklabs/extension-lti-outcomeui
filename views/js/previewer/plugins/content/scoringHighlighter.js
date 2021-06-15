@@ -323,6 +323,16 @@ define([
                 }
             };
 
+            /**
+             * Remove all highlights
+             * @param {MouseEvent<HTMLAnchorElement>} e
+             */
+            this.clearAllHighlights = e => {
+                e.preventDefault();
+                // TODO: use correct method
+                highlighter.clearHighlights();
+            };
+
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
             });
@@ -340,7 +350,8 @@ define([
 
             this.$controls = {
                 $eraser: $container.find('.highlighter-eraser'),
-                $color: $container.find('.color-button')
+                $color: $container.find('.color-button'),
+                $clearAllBtn: $container.find('.highlighter-clear-all-btn')
             };
 
             this.$controls.$eraser.on('click', e => {
@@ -361,6 +372,8 @@ define([
                 this.toggleHighlighter(activeColor);
                 this.highlight();
             });
+
+            this.$controls.$clearAllBtn.on('click', this.clearAllHighlights);
         },
 
         /**
