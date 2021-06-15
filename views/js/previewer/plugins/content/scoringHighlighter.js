@@ -95,6 +95,7 @@ define([
             this.$highlighterTray = $(
                 highlighterTrayTpl({
                     label: __('highlighter'),
+                    clearAllButtonText: __('clear all'),
                     colors
                 })
             );
@@ -338,7 +339,7 @@ define([
             this.hide();
 
             this.$controls = {
-                $eraser: $container.find('button.icon-eraser'),
+                $eraser: $container.find('.highlighter-eraser'),
                 $color: $container.find('.color-button')
             };
 

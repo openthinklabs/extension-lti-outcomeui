@@ -1,12 +1,13 @@
-$highlighterTrayWidth: 30rem;
-$highlighterTrayHeight: 4.4rem;
+$highlighterTrayHeight:  5.5rem;
 
 .highlighter-container {
-    position: relative;
-    width: $highlighterTrayWidth;
-    min-height: $highlighterTrayHeight;
-    left: calc(100% - #{$highlighterTrayWidth} - 1rem);
+    position: fixed;
+    right: 1rem;
     z-index: 1;
+}
+
+.highlighter-offset {
+    min-height: $highlighterTrayHeight;
 }
 
 .can-erase {
@@ -35,50 +36,63 @@ $highlighterTrayHeight: 4.4rem;
     $pinkHighlightColor: #ffbdf5;
     $blueHighlightColor: #a3d7ff;
 
-    $actionButtonSize: 1.6rem;
-    $actionButtonHoverSize: 2.4rem;
+    $actionButtonSize: 2rem;
+    $actionButtonHoverSize: 3rem;
 
-    position: fixed;
-    border-radius: 8px;
-    width: $highlighterTrayWidth;
+    height: $highlighterTrayHeight;
+    padding: 0 1.5rem;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: $highlighterBackground;
 
+    & .highlighter-clear-all-btn {
+        color: white;
+        font-size: 2rem;
+        white-space: nowrap;
+        margin-left: 1.5rem;
+    }
+
     & .highlighter-title {
         text-transform: uppercase;
         color: white;
         border: none;
-        margin: 0 1rem;
+        font-size: 2rem;
     }
 
     & .items {
         display: flex;
         align-items: center;
+        margin: 0 1.5rem;
     }
 
-    & .icon-eraser {
+    & .highlighter-eraser {
         color: white;
         background: transparent;
         padding: 0;
         width: $highlighterTrayHeight;
         height: $highlighterTrayHeight;
 
-        &:before {
-            font-size: $actionButtonSize;
+        svg {
+            height: $actionButtonSize;
+            fill: white;
         }
 
-        &:hover:before {
-            font-size: $actionButtonHoverSize;
+        &:hover {
+            svg {
+                height: $actionButtonHoverSize;
+            }
         }
     }
 
     & .eraser-on {
         position: relative;
 
-        &:hover:before {
-            font-size: $actionButtonSize;
+        &:hover {
+            svg {
+                height: $actionButtonSize;
+            }
         }
 
         &:after {
@@ -102,7 +116,7 @@ $highlighterTrayHeight: 4.4rem;
 
         .counter {
             color: $highlighterBackground;
-            font-size: 1rem;
+            font-size: 1.25rem;
             text-shadow: none;
             position: absolute;
             top: 50%;
@@ -122,17 +136,25 @@ $highlighterTrayHeight: 4.4rem;
                 width: $actionButtonHoverSize;
             }
         }
-    }
 
-    & .color-selected {
-        &:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            padding: 1.6rem;
-            border: 2px solid;
-            border-radius: 50%;
+        &.color-selected {
+            &:after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                padding: 1.6rem;
+                border-width: 2px;
+                border-style: solid;
+                border-radius: 50%;
+            }
+
+            .counter { 
+                border-radius: $actionButtonSize;
+                line-height: $actionButtonSize;
+                height: $actionButtonSize;
+                width: $actionButtonSize;
+            }
         }
     }
 
