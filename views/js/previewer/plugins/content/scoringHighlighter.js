@@ -46,20 +46,25 @@ define([
             const CONTAINER_SELECTOR = '.qti-itemBody';
 
             /**
-             * @typedef Colors
-             * @type {Object}
+             * @readonly
+             * @enum {string}
              */
             const colors = {
                 ocher: 'txt-user-highlight-ocher',
-                pink: 'txt-user-highlight-pink',
-                blue: 'txt-user-highlight-blue'
+                blue: 'txt-user-highlight-blue',
+                pink: 'txt-user-highlight-pink'
             };
+
+            /**
+             * @memberof colors
+             */
+            const colorsOrder = ['ocher', 'blue', 'pink'];
 
             const highlighter = highlighterFactory({
                 className: colors.ocher,
                 containerSelector: CONTAINER_SELECTOR,
                 containersBlackList: [],
-                colors: colors
+                colors
             });
 
             this.eventListener = e => {
@@ -96,7 +101,7 @@ define([
                 highlighterTrayTpl({
                     label: __('highlighter'),
                     clearAllButtonText: __('clear all'),
-                    colors
+                    colors: colorsOrder
                 })
             );
 
@@ -183,7 +188,7 @@ define([
 
             /**
              * Notify highlighter plugin which color is active
-             * @param {@memberof Colors} color
+             * @param {colors} color
              */
             this.setActiveColor = color => {
                 highlighter.setActiveColor(color);
@@ -329,8 +334,8 @@ define([
              */
             this.clearAllHighlights = e => {
                 e.preventDefault();
-                // TODO: use correct method
                 highlighter.clearHighlights();
+                saveHighlights();
             };
 
             testRunner.after('renderitem', function () {
