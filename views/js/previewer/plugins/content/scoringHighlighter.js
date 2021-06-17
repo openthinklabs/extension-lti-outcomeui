@@ -47,20 +47,25 @@ define([
             const CONTAINER_SELECTOR = '.qti-itemBody';
 
             /**
-             * @typedef Colors
-             * @type {Object}
+             * @readonly
+             * @enum {string}
              */
             const colors = {
                 ocher: 'txt-user-highlight-ocher',
-                pink: 'txt-user-highlight-pink',
-                blue: 'txt-user-highlight-blue'
+                blue: 'txt-user-highlight-blue',
+                pink: 'txt-user-highlight-pink'
             };
+
+            /**
+             * @memberof colors
+             */
+            const colorsOrder = ['ocher', 'blue', 'pink'];
 
             const highlighter = highlighterFactory({
                 className: colors.ocher,
                 containerSelector: CONTAINER_SELECTOR,
                 containersBlackList: [],
-                colors: colors
+                colors
             });
 
             this.eventListener = e => {
@@ -96,7 +101,8 @@ define([
             this.$highlighterTray = $(
                 highlighterTrayTpl({
                     label: __('highlighter'),
-                    colors
+                    clearAllButtonText: __('clear all'),
+                    colors: colorsOrder
                 })
             );
 
@@ -183,7 +189,7 @@ define([
 
             /**
              * Notify highlighter plugin which color is active
-             * @param {@memberof Colors} color
+             * @param {colors} color
              */
             this.setActiveColor = color => {
                 highlighter.setActiveColor(color);
@@ -323,6 +329,16 @@ define([
                 }
             };
 
+            /**
+             * Remove all highlights
+             * @param {MouseEvent<HTMLAnchorElement>} e
+             */
+            this.clearAllHighlights = e => {
+                e.preventDefault();
+                highlighter.clearHighlights();
+                saveHighlights();
+            };
+
             testRunner.after('renderitem', function () {
                 window.parent.postMessage({ event: 'rendered' }, '*');
             });
@@ -339,8 +355,9 @@ define([
             this.hide();
 
             this.$controls = {
-                $eraser: $container.find('button.icon-eraser'),
-                $color: $container.find('.color-button')
+                $eraser: $container.find('.highlighter-eraser'),
+                $color: $container.find('.color-button'),
+                $clearAllBtn: $container.find('.highlighter-clear-all-btn')
             };
 
             this.$controls.$eraser.on('click', e => {
@@ -361,6 +378,8 @@ define([
                 this.toggleHighlighter(activeColor);
                 this.highlight();
             });
+
+            this.$controls.$clearAllBtn.on('click', this.clearAllHighlights);
         },
 
         /**
