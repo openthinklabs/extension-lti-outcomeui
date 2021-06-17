@@ -128,7 +128,8 @@ $highlighterTrayHeight:  5.5rem;
             min-width: $actionButtonSize;
         }
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             .counter {
                 border-radius: $actionButtonHoverSize;
                 line-height: $actionButtonHoverSize;
