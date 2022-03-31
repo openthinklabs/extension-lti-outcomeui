@@ -50,6 +50,18 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
     public function providerFormat(): array
     {
         return [
+            'without-uri-and-attempt' => [
+                [[]],
+                []
+            ],
+            'without-class' => [
+                [$this->getItemResultWithoutClass()],
+                []
+            ],
+            'without-response-class' => [
+                [$this->getItemResultWithoutResponseClass()],
+                []
+            ],
             'normal' => [
                 [$this->getItemResult()],
                 [
@@ -78,6 +90,32 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
                             ]
                         ]
                     ]
+                ]
+            ]
+        ];
+    }
+
+    private function getItemResultWithoutClass(): array
+    {
+        $responseVariable = $this->createMock(ResponseVariable::class);
+        $responseVariable->method('getIdentifier')->willReturn('IDENTIFIER');
+        $responseVariable->method('getBaseType')->willReturn('file');
+
+        return [
+            'uri' => 'URI',
+            'attempt' => 'attempt'
+        ];
+    }
+
+    private function getItemResultWithoutResponseClass(): array
+    {
+        return [
+            'uri' => 'URI',
+            'attempt' => 'attempt',
+            'taoResultServer_models_classes_ResponseVariable' => [
+                [
+                    'uri' => 'FILE',
+                    'var' => null,
                 ]
             ]
         ];

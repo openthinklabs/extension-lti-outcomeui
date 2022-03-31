@@ -22,14 +22,11 @@ declare(strict_types=1);
 
 namespace oat\ltiOutcomeUi\model\service;
 
-use oat\oatbox\service\ConfigurableService;
 use oat\taoOutcomeUi\helper\ResponseVariableFormatter;
 use taoResultServer_models_classes_ResponseVariable as ResponseVariable;
 
-class StructuredVariablesToItemStateService extends ConfigurableService
+class StructuredVariablesToItemStateService
 {
-    public const SERVICE_ID = 'ltiOutcomeUi/StructuredVariablesToItemStateService';
-
     private const RESULT_KEY_URI = 'uri';
     private const RESULT_KEY_ATTEMPT = 'attempt';
     private const RESULT_KEY_RESPONSE_VARIABLE = 'taoResultServer_models_classes_ResponseVariable';
