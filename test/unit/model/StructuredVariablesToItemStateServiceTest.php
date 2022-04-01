@@ -23,7 +23,9 @@ declare(strict_types=1);
 namespace oat\ltiOutcomeUi\test\unit\model;
 
 use oat\ltiOutcomeUi\model\service\StructuredVariablesToItemStateService;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use taoResultServer_models_classes_ResponseVariable as ResponseVariable;
 
 final class StructuredVariablesToItemStateServiceTest extends TestCase
@@ -31,9 +33,56 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
     /** @var StructuredVariablesToItemStateService */
     private $structuredVariablesToItemStateService;
 
+    /** @var LoggerInterface|MockObject */
+    private $loggerMock;
+
     protected function setUp(): void
     {
-        $this->structuredVariablesToItemStateService = new StructuredVariablesToItemStateService();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->structuredVariablesToItemStateService = new StructuredVariablesToItemStateService($this->loggerMock);
+    }
+
+    public function testFormatWithoutUriAndAttempt(): void
+    {
+        $testResultVariable = [
+            'uri1' => 'uri',
+            'attempt1' => 'attempt'
+        ];
+
+        $this->loggerMock
+            ->expects(self::once())
+            ->method('warning')
+            ->with(
+                'assessment result does not have the variables `uri` or `attempt`',
+                $testResultVariable
+            );
+
+        self::assertSame(
+            [],
+            $this->structuredVariablesToItemStateService->format([$testResultVariable])
+        );
+    }
+
+    public function testFormatWithoutResponseClass(): void
+    {
+        $testResultVariable = [
+            'uri' => 'URI',
+            'attempt' => 'attempt',
+            'taoResultServer_models_classes_ResponseVariable' => null
+        ];
+
+        $this->loggerMock
+            ->expects(self::once())
+            ->method('warning')
+            ->with(
+                'assessment result does not have the variable `taoResultServer_models_classes_ResponseVariable`',
+                $testResultVariable
+            );
+
+        self::assertSame(
+            [],
+            $this->structuredVariablesToItemStateService->format([$testResultVariable])
+        );
     }
 
     /**
@@ -50,18 +99,6 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
     public function providerFormat(): array
     {
         return [
-            'without-uri-and-attempt' => [
-                [[]],
-                []
-            ],
-            'without-class' => [
-                [$this->getItemResultWithoutClass()],
-                []
-            ],
-            'without-array' => [
-                [$this->getItemResultWithoutArray()],
-                []
-            ],
             'without-response-class' => [
                 [$this->getItemResultWithoutResponseClass()],
                 []
@@ -96,27 +133,6 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
                     ]
                 ]
             ]
-        ];
-    }
-
-    private function getItemResultWithoutClass(): array
-    {
-        $responseVariable = $this->createMock(ResponseVariable::class);
-        $responseVariable->method('getIdentifier')->willReturn('IDENTIFIER');
-        $responseVariable->method('getBaseType')->willReturn('file');
-
-        return [
-            'uri' => 'URI',
-            'attempt' => 'attempt'
-        ];
-    }
-
-    private function getItemResultWithoutArray(): array
-    {
-        return [
-            'uri' => 'URI',
-            'attempt' => 'attempt',
-            'taoResultServer_models_classes_ResponseVariable' => null
         ];
     }
 

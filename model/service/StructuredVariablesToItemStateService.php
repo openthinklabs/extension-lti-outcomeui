@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace oat\ltiOutcomeUi\model\service;
 
 use oat\taoOutcomeUi\helper\ResponseVariableFormatter;
+use Psr\Log\LoggerInterface;
 use taoResultServer_models_classes_ResponseVariable as ResponseVariable;
 
 class StructuredVariablesToItemStateService
@@ -30,6 +31,14 @@ class StructuredVariablesToItemStateService
     private const RESULT_KEY_URI = 'uri';
     private const RESULT_KEY_ATTEMPT = 'attempt';
     private const RESULT_KEY_RESPONSE_VARIABLE = 'taoResultServer_models_classes_ResponseVariable';
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function format(array $testResultVariables): array
     {
@@ -48,6 +57,7 @@ class StructuredVariablesToItemStateService
     private function formatResultVariables(array $resultVariables): ?array
     {
         if (false === isset($resultVariables[self::RESULT_KEY_URI], $resultVariables[self::RESULT_KEY_ATTEMPT])) {
+            $this->logNotHaveUriOrAttempt($resultVariables);
             return null;
         }
 
@@ -56,7 +66,9 @@ class StructuredVariablesToItemStateService
 
     private function formatResponseVariables(array $resultVariables): ?array
     {
-        if (false === isset($resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE])) {
+        $responseVariableClasses = $resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE] ?? null;
+        if (false === is_array($responseVariableClasses)) {
+            $this->logNotHaveResponseVariable($resultVariables);
             return null;
         }
 
@@ -94,5 +106,28 @@ class StructuredVariablesToItemStateService
     private function getFormatResponse(array $response): array
     {
         return ['response' => $response];
+    }
+
+    private function logNotHaveUriOrAttempt(array $resultVariables): void
+    {
+        $this->logger->warning(
+            sprintf(
+                'assessment result does not have the variables `%s` or `%s`',
+                self::RESULT_KEY_URI,
+                self::RESULT_KEY_ATTEMPT
+            ),
+            $resultVariables
+        );
+    }
+
+    private function logNotHaveResponseVariable(array $resultVariables): void
+    {
+        $this->logger->warning(
+            sprintf(
+                'assessment result does not have the variable `%s`',
+                self::RESULT_KEY_RESPONSE_VARIABLE
+            ),
+            $resultVariables
+        );
     }
 }
