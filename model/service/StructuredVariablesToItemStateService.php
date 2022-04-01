@@ -62,24 +62,28 @@ class StructuredVariablesToItemStateService
 
         $variables = [];
 
-        $responseVariableClasses = $resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE];
-        foreach ($responseVariableClasses as $responseVariableClass) {
-            $uri = $responseVariableClass['uri'] ?? null;
+        foreach ($resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE] as $resultVariable) {
+            $responseVariableClass = is_array($resultVariable) ? $resultVariable : [];
             $responseVariable = $responseVariableClass['var'] ?? null;
             if ($responseVariable instanceof ResponseVariable) {
-                $variables[$responseVariable->getIdentifier()] = $this->formatResponseVariable($responseVariable, $uri);
+                $variables[$responseVariable->getIdentifier()] = $this->formatResponseVariable(
+                    $responseVariable,
+                    $responseVariableClass
+                );
             }
         }
 
         return $variables;
     }
 
-    private function formatResponseVariable(ResponseVariable $responseVariable, $uri): array
+    private function formatResponseVariable(ResponseVariable $responseVariable, array $responseVariableClass): array
     {
         if ($responseVariable->getBaseType() === 'file') {
             return $this->getFormatResponse([
                 'base' => [
-                    'file' => ['uri' => $uri]
+                    'file' => [
+                        'uri' => $responseVariableClass['uri'] ?? null
+                    ]
                 ]
             ]);
         }

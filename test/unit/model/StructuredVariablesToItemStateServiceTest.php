@@ -58,6 +58,10 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
                 [$this->getItemResultWithoutClass()],
                 []
             ],
+            'without-array' => [
+                [$this->getItemResultWithoutArray()],
+                []
+            ],
             'without-response-class' => [
                 [$this->getItemResultWithoutResponseClass()],
                 []
@@ -104,6 +108,15 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
         return [
             'uri' => 'URI',
             'attempt' => 'attempt'
+        ];
+    }
+
+    private function getItemResultWithoutArray(): array
+    {
+        return [
+            'uri' => 'URI',
+            'attempt' => 'attempt',
+            'taoResultServer_models_classes_ResponseVariable' => null
         ];
     }
 
