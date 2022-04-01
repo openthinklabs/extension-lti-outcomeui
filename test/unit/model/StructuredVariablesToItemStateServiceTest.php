@@ -53,7 +53,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
             ->expects(self::once())
             ->method('warning')
             ->with(
-                'assessment result does not have the variables `uri` or `attempt`',
+                'Assessment result does not have the variables `uri` or `attempt`',
                 $testResultVariable
             );
 
@@ -75,7 +75,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
             ->expects(self::once())
             ->method('warning')
             ->with(
-                'assessment result does not have the variable `taoResultServer_models_classes_ResponseVariable`',
+                'Assessment result does not have the variable `taoResultServer_models_classes_ResponseVariable`',
                 $testResultVariable
             );
 

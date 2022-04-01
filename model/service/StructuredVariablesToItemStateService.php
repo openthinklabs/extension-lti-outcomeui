@@ -112,7 +112,7 @@ class StructuredVariablesToItemStateService
     {
         $this->logger->warning(
             sprintf(
-                'assessment result does not have the variables `%s` or `%s`',
+                'Assessment result does not have the variables `%s` or `%s`',
                 self::RESULT_KEY_URI,
                 self::RESULT_KEY_ATTEMPT
             ),
@@ -124,7 +124,7 @@ class StructuredVariablesToItemStateService
     {
         $this->logger->warning(
             sprintf(
-                'assessment result does not have the variable `%s`',
+                'Assessment result does not have the variable `%s`',
                 self::RESULT_KEY_RESPONSE_VARIABLE
             ),
             $resultVariables
