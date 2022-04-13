@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace oat\ltiOutcomeUi\model\provider;
 
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\ltiOutcomeUi\model\service\StructuredVariablesToItemStateService;
+use oat\ltiOutcomeUi\model\service\ResultVariableStructureHandler;
 use oat\oatbox\log\LoggerService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
@@ -34,13 +34,13 @@ final class LtiOutcomeUiProvider implements ContainerServiceProviderInterface
     public function __invoke(ContainerConfigurator $configurator): void
     {
         $services = $configurator->services();
-        $this->defineStructuredVariablesToItemStateService($services);
+        $this->defineResultVariableStructureHandler($services);
     }
 
-    private function defineStructuredVariablesToItemStateService(ServicesConfigurator $services): void
+    private function defineResultVariableStructureHandler(ServicesConfigurator $services): void
     {
         $services
-            ->set(StructuredVariablesToItemStateService::class, StructuredVariablesToItemStateService::class)
+            ->set(ResultVariableStructureHandler::class, ResultVariableStructureHandler::class)
             ->public()
             ->args([
                 service(LoggerService::SERVICE_ID)

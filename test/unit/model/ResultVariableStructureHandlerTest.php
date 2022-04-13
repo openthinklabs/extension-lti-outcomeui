@@ -22,16 +22,16 @@ declare(strict_types=1);
 
 namespace oat\ltiOutcomeUi\test\unit\model;
 
-use oat\ltiOutcomeUi\model\service\StructuredVariablesToItemStateService;
+use oat\ltiOutcomeUi\model\service\ResultVariableStructureHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use taoResultServer_models_classes_ResponseVariable as ResponseVariable;
 
-final class StructuredVariablesToItemStateServiceTest extends TestCase
+final class ResultVariableStructureHandlerTest extends TestCase
 {
-    /** @var StructuredVariablesToItemStateService */
-    private $structuredVariablesToItemStateService;
+    /** @var ResultVariableStructureHandler */
+    private $resultVariableStructureHandler;
 
     /** @var LoggerInterface|MockObject */
     private $loggerMock;
@@ -39,7 +39,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->structuredVariablesToItemStateService = new StructuredVariablesToItemStateService($this->loggerMock);
+        $this->resultVariableStructureHandler = new ResultVariableStructureHandler($this->loggerMock);
     }
 
     public function testFormatWithoutUriAndAttempt(): void
@@ -59,7 +59,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
 
         self::assertSame(
             [],
-            $this->structuredVariablesToItemStateService->format([$testResultVariable])
+            $this->resultVariableStructureHandler->format([$testResultVariable])
         );
     }
 
@@ -81,7 +81,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
 
         self::assertSame(
             [],
-            $this->structuredVariablesToItemStateService->format([$testResultVariable])
+            $this->resultVariableStructureHandler->format([$testResultVariable])
         );
     }
 
@@ -92,7 +92,7 @@ final class StructuredVariablesToItemStateServiceTest extends TestCase
     {
         self::assertSame(
             $expected,
-            $this->structuredVariablesToItemStateService->format($resultVariables)
+            $this->resultVariableStructureHandler->format($resultVariables)
         );
     }
 

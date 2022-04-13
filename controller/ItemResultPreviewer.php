@@ -20,7 +20,7 @@
 namespace oat\ltiOutcomeUi\controller;
 
 use oat\generis\model\OntologyAwareTrait;
-use oat\ltiOutcomeUi\model\service\StructuredVariablesToItemStateService;
+use oat\ltiOutcomeUi\model\service\ResultVariableStructureHandler;
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\taoDelivery\model\execution\ServiceProxy;
 use oat\taoLti\controller\ToolModule;
@@ -152,7 +152,7 @@ class ItemResultPreviewer extends ToolModule
     ): ?array {
         $variable = $this->getItemVariable($delivery, $resultIdentifier, $itemDefinition);
         if (isset($variable['uri'])) {
-            $responses = $this->getStructuredVariablesToItemStateService()->format([$variable]);
+            $responses = $this->getResultVariableStructureHandler()->format([$variable]);
             if (isset($responses[$variable['uri']])) {
                 return $responses[$variable['uri']];
             }
@@ -161,9 +161,9 @@ class ItemResultPreviewer extends ToolModule
         return null;
     }
 
-    private function getStructuredVariablesToItemStateService(): StructuredVariablesToItemStateService
+    private function getResultVariableStructureHandler(): ResultVariableStructureHandler
     {
-        return $this->getPsrContainer()->get(StructuredVariablesToItemStateService::class);
+        return $this->getPsrContainer()->get(ResultVariableStructureHandler::class);
     }
 
     /**

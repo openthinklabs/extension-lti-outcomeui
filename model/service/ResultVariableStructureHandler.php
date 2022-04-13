@@ -26,7 +26,7 @@ use oat\taoOutcomeUi\helper\ResponseVariableFormatter;
 use Psr\Log\LoggerInterface;
 use taoResultServer_models_classes_ResponseVariable as ResponseVariable;
 
-class StructuredVariablesToItemStateService
+class ResultVariableStructureHandler
 {
     private const RESULT_KEY_URI = 'uri';
     private const RESULT_KEY_ATTEMPT = 'attempt';
@@ -56,7 +56,7 @@ class StructuredVariablesToItemStateService
 
     private function formatResultVariables(array $resultVariables): ?array
     {
-        if (false === isset($resultVariables[self::RESULT_KEY_URI], $resultVariables[self::RESULT_KEY_ATTEMPT])) {
+        if (!isset($resultVariables[self::RESULT_KEY_URI], $resultVariables[self::RESULT_KEY_ATTEMPT])) {
             $this->logNotHaveUriOrAttempt($resultVariables);
             return null;
         }
@@ -67,7 +67,7 @@ class StructuredVariablesToItemStateService
     private function formatResponseVariables(array $resultVariables): ?array
     {
         $responseVariableClasses = $resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE] ?? null;
-        if (false === is_array($responseVariableClasses)) {
+        if (!is_array($responseVariableClasses)) {
             $this->logNotHaveResponseVariable($resultVariables);
             return null;
         }
