@@ -36,17 +36,11 @@ final class ResultVariableStructureHandlerTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
-    protected function setUp(): void
-    {
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->resultVariableStructureHandler = new ResultVariableStructureHandler($this->loggerMock);
-    }
-
     public function testFormatWithoutUriAndAttempt(): void
     {
         $testResultVariable = [
             'uri1' => 'uri',
-            'attempt1' => 'attempt'
+            'attempt1' => 'attempt',
         ];
 
         $this->loggerMock
@@ -68,7 +62,7 @@ final class ResultVariableStructureHandlerTest extends TestCase
         $testResultVariable = [
             'uri' => 'URI',
             'attempt' => 'attempt',
-            'taoResultServer_models_classes_ResponseVariable' => null
+            'taoResultServer_models_classes_ResponseVariable' => null,
         ];
 
         $this->loggerMock
@@ -101,7 +95,7 @@ final class ResultVariableStructureHandlerTest extends TestCase
         return [
             'without-response-class' => [
                 [$this->getItemResultWithoutResponseClass()],
-                []
+                [],
             ],
             'normal' => [
                 [$this->getItemResult()],
@@ -110,12 +104,12 @@ final class ResultVariableStructureHandlerTest extends TestCase
                         'attempt' => [
                             'IDENTIFIER' => [
                                 'response' => [
-                                    'base' => ['string' => 'value']
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                    'base' => ['string' => 'value'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'file' => [
                 [$this->getItemResultFile()],
@@ -125,14 +119,14 @@ final class ResultVariableStructureHandlerTest extends TestCase
                             'IDENTIFIER' => [
                                 'response' => [
                                     'base' => [
-                                        'file' => ['uri' => 'FILE']
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                        'file' => ['uri' => 'FILE'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -145,26 +139,8 @@ final class ResultVariableStructureHandlerTest extends TestCase
                 [
                     'uri' => 'FILE',
                     'var' => null,
-                ]
-            ]
-        ];
-    }
-
-    private function getItemResultFile(): array
-    {
-        $responseVariable = $this->createMock(ResponseVariable::class);
-        $responseVariable->method('getIdentifier')->willReturn('IDENTIFIER');
-        $responseVariable->method('getBaseType')->willReturn('file');
-
-        return [
-            'uri' => 'URI',
-            'attempt' => 'attempt',
-            'taoResultServer_models_classes_ResponseVariable' => [
-                [
-                    'uri' => 'FILE',
-                    'var' => $responseVariable,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -183,8 +159,32 @@ final class ResultVariableStructureHandlerTest extends TestCase
                 [
                     'uri' => 'STRING',
                     'var' => $responseVariable,
-                ]
-            ]
+                ],
+            ],
         ];
+    }
+
+    private function getItemResultFile(): array
+    {
+        $responseVariable = $this->createMock(ResponseVariable::class);
+        $responseVariable->method('getIdentifier')->willReturn('IDENTIFIER');
+        $responseVariable->method('getBaseType')->willReturn('file');
+
+        return [
+            'uri' => 'URI',
+            'attempt' => 'attempt',
+            'taoResultServer_models_classes_ResponseVariable' => [
+                [
+                    'uri' => 'FILE',
+                    'var' => $responseVariable,
+                ],
+            ],
+        ];
+    }
+
+    protected function setUp(): void
+    {
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->resultVariableStructureHandler = new ResultVariableStructureHandler($this->loggerMock);
     }
 }

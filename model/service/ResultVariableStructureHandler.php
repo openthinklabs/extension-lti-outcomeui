@@ -69,6 +69,7 @@ class ResultVariableStructureHandler
         $responseVariableClasses = $resultVariables[self::RESULT_KEY_RESPONSE_VARIABLE] ?? null;
         if (!is_array($responseVariableClasses)) {
             $this->logNotHaveResponseVariable($resultVariables);
+
             return null;
         }
 
@@ -94,7 +95,7 @@ class ResultVariableStructureHandler
             return $this->getFormatResponse([
                 'base' => [
                     'file' => [
-                        'uri' => $responseVariableClass['uri'] ?? null
+                        'uri' => $responseVariableClass['uri'] ?? null,
                     ]
                 ]
             ]);
