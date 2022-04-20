@@ -14,25 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 namespace oat\ltiOutcomeUi\controller;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\ltiOutcomeUi\model\service\ResultVariableStructureHandler;
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\taoDelivery\model\execution\ServiceProxy;
 use oat\taoLti\controller\ToolModule;
 use oat\taoLti\models\classes\LtiException;
-use oat\taoOutcomeUi\helper\ResponseVariableFormatter;
 use oat\taoOutcomeUi\model\ResultsService;
 use oat\taoOutcomeUi\model\ResultsViewerService;
 use oat\taoQtiTestPreviewer\models\ItemPreviewer;
 use oat\taoQtiTestPreviewer\models\PreviewLanguageService;
 use oat\taoOutcomeUi\model\Wrapper\ResultServiceWrapper;
 use oat\taoResultServer\models\classes\ResultServerService;
-use \core_kernel_classes_Resource;
-use \tao_helpers_Uri;
+use core_kernel_classes_Resource;
+use tao_helpers_Uri;
 use oat\taoLti\models\classes\LtiMessages\LtiErrorMessage;
 
 /**
@@ -103,7 +103,7 @@ class ItemResultPreviewer extends ToolModule
             $this->defaultData();
             $data['type'] = $this->getItemResultPreviewerType($resultIdentifier);
             $data['content'] = $this->getItemContent($itemDefinition, $resultIdentifier, $delivery->getUri());
-            $data['state'] = current($this->getItemResultVariables($delivery, $resultIdentifier, $itemDefinition));
+            $data['state'] = current($this->getItemResultVariables($delivery, $resultIdentifier, $itemDefinition) ?? []);
             $data['itemDefinition'] = $itemDefinition;
             $data['resultIdentifier'] = $resultIdentifier;
             $data['deliveryIdentifier'] = $delivery->getUri();
@@ -142,20 +142,28 @@ class ItemResultPreviewer extends ToolModule
      * @param core_kernel_classes_Resource $delivery
      * @param $resultIdentifier
      * @param $itemDefinition
-     * @return null
+     * @return array|null
      * @throws \common_Exception
      */
-    protected function getItemResultVariables(core_kernel_classes_Resource $delivery, $resultIdentifier, $itemDefinition)
-    {
+    protected function getItemResultVariables(
+        core_kernel_classes_Resource $delivery,
+        $resultIdentifier,
+        $itemDefinition
+    ): ?array {
         $variable = $this->getItemVariable($delivery, $resultIdentifier, $itemDefinition);
         if (isset($variable['uri'])) {
-            $responses = ResponseVariableFormatter::formatStructuredVariablesToItemState([$variable]);
+            $responses = $this->getResultVariableStructureHandler()->format([$variable]);
             if (isset($responses[$variable['uri']])) {
                 return $responses[$variable['uri']];
             }
         }
 
         return null;
+    }
+
+    private function getResultVariableStructureHandler(): ResultVariableStructureHandler
+    {
+        return $this->getPsrContainer()->get(ResultVariableStructureHandler::class);
     }
 
     /**

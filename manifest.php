@@ -14,9 +14,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2022 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\ltiOutcomeUi\model\provider\LtiOutcomeUiProvider;
 use oat\tao\model\user\TaoRoles;
 use oat\taoLti\models\classes\LtiRoles;
 
@@ -61,5 +62,8 @@ return array(
         'BASE_URL'                => ROOT_URL . 'ltiOutcomeUi/',
     ),
     'extra' => array(
-    )
+    ),
+    'containerServiceProviders' => [
+        LtiOutcomeUiProvider::class
+    ],
 );
