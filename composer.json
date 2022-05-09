@@ -1,5 +1,5 @@
 {
-    "name": "oat-sa/extension-lti-outcomeui",
+    "name": "openthinklabs/extension-lti-outcomeui",
     "description" : "Extension to manage LTI result provider for TAO",
     "type" : "tao-extension",
     "authors" : [
