@@ -1,0 +1,17 @@
+composer.lock
+generis/
+tao/
+taoBackOffice/
+taoDelivery/
+taoDeliveryRdf/
+taoGroups/
+taoItems/
+taoLti/
+taoOutcomeUi/
+taoQtiItem/
+taoQtiTest/
+taoQtiTestPreviewer/
+taoResultServer/
+taoTestTaker/
+taoTests/
+vendor/
