@@ -1,213 +1,213 @@
 {
-    "name": "openthinklabs/extension-lti-outcomeui",
-    "description" : "Extension to manage LTI result provider for TAO",
-    "type" : "tao-extension",
-    "authors" : [
-		{
-		"name" : "Open Assessment Technologies S.A.",
-		"homepage" : "http://www.taotesting.com"
-		},
-		{
-		"name": "Jérôme Bogaerts",
-		"role": "Developer"
-		},
-		{
-		"name": "Joel Bout",
-		"role": "Developer"
-		},
-		{
-		"name": "Bertrand Chevrier",
-		"role": "Developer"
-		},
-		{
-		"name": "Lionel Lecaque",
-		"role": "Developer"
-		},
-		{
-		"name": "Patrick Plichart",
-		"role": "Developer"
-		},
-		{
-		"name": "Dieter Raber",
-		"role": "Developer"
-		},
-		{
-		"name": "Somsack Sipasseuth",
-		"role": "Developer"
-		},
-		{
-		"name": "Camille Moyon",
-		"role": "Developer"
-		}
-	],
-	"support": {
-		"forum": "https://forum.taocloud.org/",
-		"issues": "https://forum.taocloud.org/",
-		"docs": "https://hub.taocloud.org/"
-	},
-	"keywords" : [
-		"tao",
-		"oat",
-		"QTI",
-		"computer-based-assessment"
-	],
-	"homepage" : "http://www.taotesting.com",
-	"license" : [
-		"GPL-2.0-only"
-	],
-    "extra" : {
-    	"tao-extension-name" : "ltiOutcomeUi"
+  "name": "openthinklabs/extension-lti-outcomeui",
+  "description": "Extension to manage LTI result provider for TAO",
+  "type": "tao-extension",
+  "authors": [
+    {
+      "name": "Open Assessment Technologies S.A.",
+      "homepage": "http://www.taotesting.com"
     },
-	"autoload" : {
-		"psr-4": {
-			"oat\\ltiOutcomeUi\\" :""
-		}
+    {
+      "name": "Jérôme Bogaerts",
+      "role": "Developer"
     },
-    "minimum-stability" : "dev",
+    {
+      "name": "Joel Bout",
+      "role": "Developer"
+    },
+    {
+      "name": "Bertrand Chevrier",
+      "role": "Developer"
+    },
+    {
+      "name": "Lionel Lecaque",
+      "role": "Developer"
+    },
+    {
+      "name": "Patrick Plichart",
+      "role": "Developer"
+    },
+    {
+      "name": "Dieter Raber",
+      "role": "Developer"
+    },
+    {
+      "name": "Somsack Sipasseuth",
+      "role": "Developer"
+    },
+    {
+      "name": "Camille Moyon",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "forum": "https://forum.taocloud.org/",
+    "issues": "https://forum.taocloud.org/",
+    "docs": "https://hub.taocloud.org/"
+  },
+  "keywords": [
+    "tao",
+    "oat",
+    "QTI",
+    "computer-based-assessment"
+  ],
+  "homepage": "http://www.taotesting.com",
+  "license": [
+    "GPL-2.0-only"
+  ],
+  "extra": {
+    "tao-extension-name": "ltiOutcomeUi"
+  },
+  "autoload": {
+    "psr-4": {
+      "oat\\ltiOutcomeUi\\": ""
+    }
+  },
+  "minimum-stability": "dev",
   "repositories": [
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/oatbox-extension-installer.git",
       "no-api": true
-    },    
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/tao-core.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/generis.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-delivery-rdf.git",
-      "no-api": true      
-    },    
+      "no-api": true
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-item.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-itemqti.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-delivery.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-group.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-lti.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-test.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-testqti.git",
-      "no-api": true      
-    }, 
+      "no-api": true
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-backoffice.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-outcome.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-testtaker.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-outcomeui.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/extension-tao-testqti-previewer.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-generis-search.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-lti1p3-core.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/composer-npm-bridge.git",
-      "no-api": true      
-    },                                                   
+      "no-api": true
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/jig.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-lti1p3-ags.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-test-cat.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-tao-dtms.git",
-      "no-api": true      
+      "no-api": true
     },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-tao-qti.git",
-      "no-api": true      
-    },            
+      "no-api": true
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/lib-beeme.git",
-      "no-api": true      
-    },     
+      "no-api": true
+    },
     {
       "type": "vcs",
       "url": "https://github.com/openthinklabs/qti-sdk.git",
-      "no-api": true      
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-   ],
-    "require": {
-        "openthinklabs/oatbox-extension-installer": "1.2.2",
-        "openthinklabs/generis" : "15.11.0.5",
-	"openthinklabs/extension-tao-delivery" : "15.8.1.10",
-	"openthinklabs/extension-tao-lti" : "15.5.0.7",
-	"openthinklabs/extension-tao-outcomeui" : "11.0.3.3",
-	"openthinklabs/extension-tao-testqti-previewer" : "3.3.1.11"
-	},
-    "config": {
-        "allow-plugins": {
-            "openthinklabs/oatbox-extension-installer": true,
-            "openthinklabs/composer-npm-bridge": true
-        }
+      "no-api": true
     }
+  ],
+  "require": {
+    "openthinklabs/oatbox-extension-installer": "1.2.2",
+    "openthinklabs/generis": "15.19.2.1",
+    "openthinklabs/extension-tao-delivery": "15.10.0.1",
+    "openthinklabs/extension-tao-lti": "15.8.1.1",
+    "openthinklabs/extension-tao-outcomeui": "11.1.1.2",
+    "openthinklabs/extension-tao-testqti-previewer": "3.5.2.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "openthinklabs/oatbox-extension-installer": true,
+      "openthinklabs/composer-npm-bridge": true
+    }
+  }
 }
